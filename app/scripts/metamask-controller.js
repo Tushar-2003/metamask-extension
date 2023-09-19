@@ -4264,7 +4264,9 @@ export default class MetamaskController extends EventEmitter {
     engine.push(
       createAsyncMiddleware(async (req, res, next) => {
         if (this.preferencesController.getUseRequestQueue() === false) {
-          return await next();
+          console.log('queue flag off: skipping queue middleware');
+          await next();
+          return;
         }
 
         const networkClientIdForRequest = req.networkClientId;
@@ -4292,9 +4294,11 @@ export default class MetamaskController extends EventEmitter {
           }
 
           // otherwise, put up the confirmation dialog
+          console.log('Calling next on switchEthereumChain..');
 
           // eslint-disable-next-line node/callback-return
           await next();
+          console.log('switchEthereumChain middleware finished');
           return;
         }
 
