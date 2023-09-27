@@ -159,6 +159,10 @@ jobs:
           key: dependency-cache-{{ checksum "/tmp/YARN_VERSION" }}-{{ checksum "yarn.lock" }}
           paths:
             - .yarn/cache
+      - save_cache:
+          key: prep-deps-{{ .Environment.CIRCLE_BRANCH }}
+          paths:
+            - node_modules
       - persist_to_workspace:
           root: .
           paths:
@@ -354,6 +358,9 @@ jobs:
       - run: *shallow-git-clone
       - attach_workspace:
           at: .
+      - restore_cache:
+          keys:
+            - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Build extension for testing
           command: SEGMENT_HOST='https://api.segment.io' SEGMENT_WRITE_KEY='FAKE' SENTRY_DSN_DEV=https://fake@sentry.io/0000000 PORTFOLIO_URL=http://127.0.0.1:8080 BLOCKAID_FILE_CDN=storage.googleapis.com/ppom-mock-cdn yarn build:dev test --build-type flask --apply-lavamoat=false --snow=false
@@ -363,6 +370,11 @@ jobs:
       - run:
           name: Move test zips to 'builds-test-flask' to avoid conflict with production build
           command: mv ./builds ./builds-test-flask
+      - save_cache:
+          key: prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
+          paths:
+            - dist-test-flask
+            - builds-test-flask
       - persist_to_workspace:
           root: .
           paths:
@@ -786,6 +798,9 @@ jobs:
           command: ./.circleci/scripts/firefox-install.sh
       - attach_workspace:
           at: .
+      - restore_cache:
+          keys:
+            - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Move test build to dist
           command: mv ./dist-test-flask ./dist
@@ -823,6 +838,9 @@ jobs:
           command: ./.circleci/scripts/chrome-install.sh
       - attach_workspace:
           at: .
+      - restore_cache:
+          keys:
+            - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Move test build to dist
           command: mv ./dist-test-flask ./dist
