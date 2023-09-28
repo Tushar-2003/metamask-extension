@@ -167,10 +167,15 @@ async function main() {
   }
 
   // For running E2Es in parallel in CI
-  const currentChunkIndex = process.env.CIRCLE_NODE_INDEX ?? 0;
-  const totalChunks = process.env.CIRCLE_NODE_TOTAL ?? 1;
-  const chunks = chunk(testPaths, totalChunks);
-  const currentChunk = chunks[currentChunkIndex];
+
+  await runInShell('circleci', [
+    '-c',
+    'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
+  ]);
+
+  const currentChunk = await fs.readFile('currentChunk.txt', 'utf8');
+
+  console.log('currentChunk', currentChunk);
 
   for (const testPath of currentChunk) {
     const dir = 'test/test-results/e2e';
