@@ -72,16 +72,8 @@ aliases:
 workflows:
   test_and_release:
     jobs:
-      - prep-deps
-      - prep-build-test-flask:
-          requires:
-            - prep-deps
-      - test-e2e-chrome-snaps-flask:
-          requires:
-            - prep-build-test-flask
-      - test-e2e-firefox-snaps-flask:
-          requires:
-            - prep-build-test-flask
+      - test-e2e-chrome-snaps-flask
+      - test-e2e-firefox-snaps-flask
 jobs:
   trigger-beta-build:
     executor: node-browsers-medium-plus
@@ -790,7 +782,7 @@ jobs:
 
   test-e2e-firefox-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 2
     steps:
       - run: *shallow-git-clone
       - run:
@@ -800,6 +792,7 @@ jobs:
           at: .
       - restore_cache:
           keys:
+            - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
             - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Move test build to dist
@@ -830,7 +823,7 @@ jobs:
 
   test-e2e-chrome-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 2
     steps:
       - run: *shallow-git-clone
       - run:
@@ -840,6 +833,7 @@ jobs:
           at: .
       - restore_cache:
           keys:
+            - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
             - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Move test build to dist
