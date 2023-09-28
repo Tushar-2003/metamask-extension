@@ -794,7 +794,7 @@ jobs:
 
   test-e2e-firefox-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 2
     steps:
       - run: *shallow-git-clone
       - run:
@@ -838,7 +838,7 @@ jobs:
 
   test-e2e-chrome-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 2
     steps:
       - run: *shallow-git-clone
       - run:

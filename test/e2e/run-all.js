@@ -169,13 +169,21 @@ async function main() {
 
   // For running E2Es in parallel in CI
 
-  await spawn('circleci', [
-    '-c',
-    'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
-  ]);
+  // await spawn('circleci', [
+  //   '-c',
+  //   'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
+  // ]);
 
-  const currentChunk = await fs.readFile('currentChunk.txt', 'utf8');
+  const execSync = require('child_process').execSync;
 
+  const result = execSync(
+    'circleci tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s',
+  );
+
+  // convert and show the output.
+  console.log(result.toString('utf8'));
+
+  const currentChunk = result.toString('utf8').split('\n');
   console.log('currentChunk', currentChunk);
 
   for (const testPath of currentChunk) {
