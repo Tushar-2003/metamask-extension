@@ -72,8 +72,17 @@ aliases:
 workflows:
   test_and_release:
     jobs:
-      - test-e2e-chrome-snaps-flask
-      - test-e2e-firefox-snaps-flask
+      - prep-deps
+      - prep-build-test-flask:
+          requires:
+            - prep-deps
+      - test-e2e-chrome-snaps-flask:
+          requires:
+            - prep-build-test-flask
+      - test-e2e-firefox-snaps-flask:
+          requires:
+            - prep-build-test-flask
+
 jobs:
   trigger-beta-build:
     executor: node-browsers-medium-plus
