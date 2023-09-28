@@ -131,7 +131,7 @@ async function main() {
   }
 
   // These tests should only be run on Flask for now.
-  if (buildType !== 'flask') {
+  if (buildType !== 'flask-turned-off') {
     const filteredTests = [
       'settings-add-snap-account-toggle.spec.js',
       'test-snap-accounts.spec.js',
