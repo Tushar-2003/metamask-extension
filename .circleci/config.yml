@@ -72,16 +72,19 @@ aliases:
 workflows:
   test_and_release:
     jobs:
-      - prep-deps
-      - prep-build-test-flask:
-          requires:
-            - prep-deps
-      - test-e2e-chrome-snaps-flask:
-          requires:
-            - prep-build-test-flask
-      - test-e2e-firefox-snaps-flask:
-          requires:
-            - prep-build-test-flask
+      - test-e2e-chrome-snaps-flask
+      - test-e2e-firefox-snaps-flask
+    # jobs:
+    #   - prep-deps
+    #   - prep-build-test-flask:
+    #       requires:
+    #         - prep-deps
+    #   - test-e2e-chrome-snaps-flask:
+    #       requires:
+    #         - prep-build-test-flask
+    #   - test-e2e-firefox-snaps-flask:
+    #       requires:
+    #         - prep-build-test-flask
 
 jobs:
   trigger-beta-build:
@@ -804,6 +807,9 @@ jobs:
             # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
             - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
+          name: Install dependencies
+          command: .circleci/scripts/install-dependencies.sh
+      - run:
           name: Move test build to dist
           command: mv ./dist-test-flask ./dist
       - run:
@@ -844,6 +850,9 @@ jobs:
           keys:
             # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
             - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
+      - run:
+          name: Install dependencies
+          command: .circleci/scripts/install-dependencies.sh
       - run:
           name: Move test build to dist
           command: mv ./dist-test-flask ./dist

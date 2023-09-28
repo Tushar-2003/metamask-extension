@@ -5,6 +5,7 @@ const { hideBin } = require('yargs/helpers');
 const { runInShell } = require('../../development/lib/run-command');
 const { exitWithError } = require('../../development/lib/exit-with-error');
 const { loadBuildTypesConfig } = require('../../development/lib/build-type');
+const spawn = require('cross-spawn');
 
 const getTestPathsForTestDir = async (testDir) => {
   const testFilenames = await fs.readdir(testDir, { withFileTypes: true });
@@ -168,7 +169,7 @@ async function main() {
 
   // For running E2Es in parallel in CI
 
-  await runInShell('circleci', [
+  await spawn('circleci', [
     '-c',
     'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
   ]);
