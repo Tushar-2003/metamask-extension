@@ -612,7 +612,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-chrome-mv3:
     executor: node-browsers
@@ -677,7 +677,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-chrome-rpc-mmi:
     executor: node-browsers
@@ -713,7 +713,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-firefox-snaps:
     executor: node-browsers
@@ -750,7 +750,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-chrome-snaps:
     executor: node-browsers
@@ -787,7 +787,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-firefox-snaps-flask:
     executor: node-browsers
@@ -828,7 +828,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-chrome-snaps-flask:
     executor: node-browsers
@@ -869,7 +869,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-chrome-mmi:
     executor: node-browsers
@@ -906,7 +906,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   test-e2e-firefox:
     executor: node-browsers-medium-plus
@@ -943,7 +943,7 @@ jobs:
           path: test-artifacts
           destination: test-artifacts
       - store_test_results:
-          path: test/test-results/e2e.xml
+          path: test/test-results/e2e
 
   benchmark:
     executor: node-browsers-medium-plus
