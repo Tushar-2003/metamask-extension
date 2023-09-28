@@ -72,16 +72,18 @@ aliases:
 workflows:
   test_and_release:
     jobs:
+      # - test-e2e-chrome-snaps-flask
+      # - test-e2e-firefox-snaps-flask
       - prep-deps
-      - prep-build-test-flask:
-          requires:
-            - prep-deps
+      # - prep-build-test-flask:
+      #     requires:
+      #       - prep-deps
       - test-e2e-chrome-snaps-flask:
           requires:
-            - prep-build-test-flask
+            - prep-deps
       - test-e2e-firefox-snaps-flask:
           requires:
-            - prep-build-test-flask
+            - prep-deps
 
 jobs:
   trigger-beta-build:
@@ -776,13 +778,13 @@ jobs:
               yarn test:e2e:chrome:snaps --retries 2 --debug --build-type=main
             fi
           no_output_timeout: 20m
-      # - run:
-      #     name: Merge JUnit report
-      #     command: |
-      #       if [ "$(ls -A test/test-results/e2e)" ]; then
-      #         yarn test:e2e:report
-      #       fi
-      #     when: always
+      - run:
+          name: Merge JUnit report
+          command: |
+            if [ "$(ls -A test/test-results/e2e)" ]; then
+              yarn test:e2e:report
+            fi
+          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -858,13 +860,13 @@ jobs:
               yarn test:e2e:chrome:snaps --retries 2 --debug --build-type=flask
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
+      # - run:
+      #     name: Merge JUnit report
+      #     command: |
+      #       if [ "$(ls -A test/test-results/e2e)" ]; then
+      #         yarn test:e2e:report
+      #       fi
+      #     when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
