@@ -176,7 +176,8 @@ async function main() {
   const execSync = require('child_process').execSync;
 
   const result = execSync(
-    'circleci tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s',
+    testPaths +
+      ' | circleci tests split --split-by=timings --timings-type=filename --time-default=30s',
   );
 
   // convert and show the output.
