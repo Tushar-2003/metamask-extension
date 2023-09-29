@@ -1,5 +1,10 @@
 const { strict: assert } = require('assert');
-const { withFixtures, openDapp, convertToHexValue } = require('../helpers');
+const {
+  convertToHexValue,
+  openDapp,
+  switchToNotificationWindow,
+  withFixtures,
+} = require('../helpers');
 const FixtureBuilder = require('../fixture-builder');
 const { TEST_SNAPS_WEBSITE_URL } = require('../snaps/enums');
 
@@ -41,21 +46,19 @@ async function installNameLookupSnap(driver) {
   await driver.delay(1000);
 
   // Confirm Connect Modal
-  focusNotification(driver);
+  switchToNotificationWindow(driver, 4);
   await driver.clickElement({
     text: 'Connect',
     tag: 'button',
   });
 
   // Confirm Install Modal
-  await driver.waitForSelector({ text: 'Install' });
   await driver.clickElement({
     text: 'Install',
     tag: 'button',
   });
 
   // Success Modal
-  await driver.waitForSelector({ text: 'OK' });
   await driver.clickElement({
     text: 'OK',
     tag: 'button',
