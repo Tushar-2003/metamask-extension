@@ -1,5 +1,5 @@
 const path = require('path');
-const { promises: fs } = require('fs');
+const fs = require('fs');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { runInShell } = require('../../development/lib/run-command');
@@ -7,7 +7,9 @@ const { exitWithError } = require('../../development/lib/exit-with-error');
 const { loadBuildTypesConfig } = require('../../development/lib/build-type');
 
 const getTestPathsForTestDir = async (testDir) => {
-  const testFilenames = await fs.readdir(testDir, { withFileTypes: true });
+  const testFilenames = await fs.promises.readdir(testDir, {
+    withFileTypes: true,
+  });
   const testPaths = [];
 
   for (const itemInDirectory of testFilenames) {
@@ -173,11 +175,14 @@ async function main() {
   //   'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
   // ]);
 
+  console.log('testPaths', testPaths.join('\n'));
+
+  fs.writeFileSync('testList.txt', testPaths.join('\n'));
+
   const execSync = require('child_process').execSync;
 
   const result = execSync(
-    testPaths +
-      ' | circleci tests split --split-by=timings --timings-type=filename --time-default=30s',
+    'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
   );
 
   // convert and show the output.
@@ -191,7 +196,7 @@ async function main() {
 
   for (const testPath of currentChunk) {
     const dir = 'test/test-results/e2e';
-    fs.mkdir(dir, { recursive: true });
+    fs.promises.mkdir(dir, { recursive: true });
     await runInShell('node', [...args, testPath]);
   }
 }
