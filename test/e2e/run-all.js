@@ -189,10 +189,12 @@ async function main() {
   console.log(result.toString('utf8'));
 
   let currentChunk = result.toString('utf8').split('\n');
-  console.log('currentChunk', currentChunk);
+  console.log('currentChunk full', currentChunk);
 
   // cut currentChunk in 1/3 for now
   currentChunk = currentChunk.slice(0, currentChunk.length / 3);
+
+  console.log('currentChunk cut', currentChunk);
 
   for (const testPath of currentChunk) {
     const dir = 'test/test-results/e2e';

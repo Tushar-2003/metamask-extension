@@ -71,20 +71,20 @@ aliases:
 
 workflows:
   test_and_release:
-    jobs:
-      - test-e2e-chrome-snaps-flask
-      - test-e2e-firefox-snaps-flask
     # jobs:
-    #   - prep-deps
-    #   - prep-build-test-flask:
-    #       requires:
-    #         - prep-deps
-    #   - test-e2e-chrome-snaps-flask:
-    #       requires:
-    #         - prep-build-test-flask
-    #   - test-e2e-firefox-snaps-flask:
-    #       requires:
-    #         - prep-build-test-flask
+    # - test-e2e-chrome-snaps-flask
+    # - test-e2e-firefox-snaps-flask
+    jobs:
+      - prep-deps
+      - prep-build-test-flask:
+          requires:
+            - prep-deps
+      - test-e2e-chrome-snaps-flask:
+          requires:
+            - prep-build-test-flask
+      - test-e2e-firefox-snaps-flask:
+          requires:
+            - prep-build-test-flask
 
 jobs:
   trigger-beta-build:
@@ -802,10 +802,10 @@ jobs:
           command: ./.circleci/scripts/firefox-install.sh
       - attach_workspace:
           at: .
-      - restore_cache:
-          keys:
-            # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
-            - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
+      # - restore_cache:
+      #     keys:
+      #       # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
+      #       - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Install dependencies
           command: .circleci/scripts/install-dependencies.sh
@@ -846,10 +846,10 @@ jobs:
           command: ./.circleci/scripts/chrome-install.sh
       - attach_workspace:
           at: .
-      - restore_cache:
-          keys:
-            # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
-            - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
+      # - restore_cache:
+      #     keys:
+      #       # - prep-deps-{{ .Environment.CIRCLE_BRANCH }}
+      #       - prep-build-test-flask-{{ .Environment.CIRCLE_BRANCH }}
       - run:
           name: Install dependencies
           command: .circleci/scripts/install-dependencies.sh
