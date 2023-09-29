@@ -6,7 +6,7 @@ const {
   withFixtures,
 } = require('../helpers');
 const FixtureBuilder = require('../fixture-builder');
-const { TEST_SNAPS_WEBSITE_URL } = require('../snaps/enums');
+const { TEST_SNAPS_WEBSITE_URL } = require('./enums');
 
 const SIGNATURE_TYPE = {
   TYPED_V3: 'v3',
@@ -46,11 +46,13 @@ async function installNameLookupSnap(driver) {
   await driver.delay(1000);
 
   // Confirm Connect Modal
-  switchToNotificationWindow(driver, 4);
+  await switchToNotificationWindow(driver, 4);
   await driver.clickElement({
     text: 'Connect',
     tag: 'button',
   });
+
+  await driver.clickElementSafe('[data-testid="snap-install-scroll"]', 1000);
 
   // Confirm Install Modal
   await driver.clickElement({
@@ -75,12 +77,6 @@ async function createSignatureRequest(driver, type) {
 
 async function rejectSignatureRequest(driver) {
   await driver.clickElement({ text: 'Reject', tag: 'button' });
-  await driver.delay(3000);
-}
-
-async function focusNotification(driver) {
-  const windowHandles = await driver.getAllWindowHandles();
-  await driver.switchToWindowWithTitle('MetaMask Notification', windowHandles);
   await driver.delay(3000);
 }
 
@@ -220,12 +216,29 @@ describe('Petnames', function () {
         await login(driver);
         await openDapp(driver);
         await createSignatureRequest(driver, SIGNATURE_TYPE.TYPED_V3);
-        await focusNotification(driver);
+        await switchToNotificationWindow(driver, 3);
 
         let addresses = await getAddressesInMessage(driver);
 
-        await expectName(addresses[0], '0xCD2a3...DD826', 'test.lens', false);
-        await expectName(addresses[1], '0xbBbBB...bBBbB', 'test2.lens', false);
+        await driver.findElements({
+          css: '.signature-request-data__node__value__address .name__value',
+          text: '0xCD2...D826',
+        });
+
+        await driver.findElements({
+          css: '.signature-request-data__node__value__address .name__proposed',
+          text: 'test.lens',
+        });
+
+        await driver.findElements({
+          css: '.signature-request-data__node__value__address .name__value',
+          text: '0xbBb...BBbB',
+        });
+
+        await driver.findElements({
+          css: '.signature-request-data__node__value__address .name__proposed',
+          text: 'test2.lens',
+        });
 
         await saveName(driver, addresses[0], undefined, 'test.lens');
         await saveName(driver, addresses[1], undefined, 'test2.lens');
@@ -234,7 +247,7 @@ describe('Petnames', function () {
 
         await expectName(
           contractDetailsModal,
-          '0xCcCCc...ccccC',
+          '0xCcC...cccC',
           'test3.lens',
           false,
         );
@@ -244,7 +257,7 @@ describe('Petnames', function () {
         await rejectSignatureRequest(driver);
         await focusTestDapp(driver);
         await createSignatureRequest(driver, SIGNATURE_TYPE.TYPED_V3);
-        await focusNotification(driver);
+        await switchToNotificationWindow(driver, 3);
 
         addresses = await getAddressesInMessage(driver);
 
@@ -273,20 +286,15 @@ describe('Petnames', function () {
         await login(driver);
         await openDapp(driver);
         await createSignatureRequest(driver, SIGNATURE_TYPE.TYPED_V4);
-        await focusNotification(driver);
+        await switchToNotificationWindow(driver, 3);
 
         let addresses = await getAddressesInMessage(driver);
 
-        await expectName(addresses[0], '0xCD2a3...DD826', 'test.lens', false);
-        await expectName(addresses[1], '0xDeaDb...DbeeF', 'Test Token', false);
-        await expectName(addresses[2], '0xbBbBB...bBBbB', 'test2.lens', false);
-        await expectName(
-          addresses[3],
-          '0xB0Bda...bEa57',
-          'Test Token 2',
-          false,
-        );
-        await expectName(addresses[4], '0xB0B0b...00000', undefined, false);
+        await expectName(addresses[0], '0xCD2...D826', 'test.lens', false);
+        await expectName(addresses[1], '0xDea...beeF', 'Test Token', false);
+        await expectName(addresses[2], '0xbBb...BBbB', 'test2.lens', false);
+        await expectName(addresses[3], '0xB0B...Ea57', 'Test Token 2', false);
+        await expectName(addresses[4], '0xB0B...0000', undefined, false);
 
         await saveName(driver, addresses[0], undefined, 'test.lens');
         await saveName(driver, addresses[3], undefined, 'Test Token 2');
@@ -295,7 +303,7 @@ describe('Petnames', function () {
 
         await expectName(
           contractDetailsModal,
-          '0xCcCCc...ccccC',
+          '0xCcC...cccC',
           'test3.lens',
           false,
         );
@@ -305,7 +313,7 @@ describe('Petnames', function () {
         await rejectSignatureRequest(driver);
         await focusTestDapp(driver);
         await createSignatureRequest(driver, SIGNATURE_TYPE.TYPED_V4);
-        await focusNotification(driver);
+        await switchToNotificationWindow(driver, 3);
 
         addresses = await getAddressesInMessage(driver);
 
@@ -337,7 +345,7 @@ describe('Petnames', function () {
         await installNameLookupSnap(driver);
         await focusTestDapp(driver);
         await createSignatureRequest(driver, SIGNATURE_TYPE.TYPED_V4);
-        await focusNotification(driver);
+        await switchToNotificationWindow(driver, 4);
 
         const addresses = await getAddressesInMessage(driver);
 

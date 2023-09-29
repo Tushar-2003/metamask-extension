@@ -776,7 +776,7 @@ jobs:
           command: |
             if .circleci/scripts/test-run-e2e.sh
             then
-              yarn test:e2e:chrome:snaps --retries 2 --debug --build-type=main
+              yarn test:e2e:chrome:snaps --debug --build-type=main
             fi
           no_output_timeout: 20m
       - run:
@@ -794,7 +794,7 @@ jobs:
 
   test-e2e-firefox-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 4
     steps:
       - run: *shallow-git-clone
       - run:
@@ -820,7 +820,7 @@ jobs:
           command: |
             if .circleci/scripts/test-run-e2e.sh
             then
-              yarn test:e2e:firefox:snaps --retries 2 --debug --build-type=flask
+              yarn test:e2e:firefox:snaps --debug --build-type=flask
             fi
           no_output_timeout: 20m
       # - run:
@@ -838,7 +838,7 @@ jobs:
 
   test-e2e-chrome-snaps-flask:
     executor: node-browsers
-    parallelism: 8
+    parallelism: 4
     steps:
       - run: *shallow-git-clone
       - run:
