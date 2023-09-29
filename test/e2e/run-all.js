@@ -162,20 +162,26 @@ async function main() {
   fs.writeFileSync('testList.txt', testPaths.join('\n'));
 
   // use `circleci tests split` on `testList.txt`
-  const result = execSync(
-    'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
-  );
+  // const result = execSync(
+  //   'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
+  // );
 
   // take the line-delimited result and split into an array
-  const currentChunk = result.toString('utf8').split('\n');
+  // const currentChunk = result.toString('utf8').split('\n');
 
   fs.promises.mkdir('test/test-results/e2e', { recursive: true });
 
-  for (const testPath of currentChunk) {
-    if (testPath !== '') {
-      await runInShell('node', [...args, testPath]);
-    }
-  }
+  execSync(
+    'circleci tests run --command="xargs node ' +
+      args.join(' ') +
+      '" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
+  );
+
+  // for (const testPath of currentChunk) {
+  //   if (testPath !== '') {
+  //     await runInShell('node', [...args, testPath]);
+  //   }
+  // }
 }
 
 main().catch((error) => {
