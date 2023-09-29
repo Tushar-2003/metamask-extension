@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+const { execSync } = require('child_process');
 const { runInShell } = require('../../development/lib/run-command');
 const { exitWithError } = require('../../development/lib/exit-with-error');
 const { loadBuildTypesConfig } = require('../../development/lib/build-type');
@@ -175,11 +176,14 @@ async function main() {
   //   'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
   // ]);
 
-  console.log('testPaths', testPaths.join('\n'));
+  console.log('full testPaths', testPaths.join('\n'));
+
+  // // cut testPaths in 1/4 for now
+  // testPaths = testPaths.slice(0, testPaths.length / 4);
+
+  // console.log('cut testPaths', testPaths.join('\n'));
 
   fs.writeFileSync('testList.txt', testPaths.join('\n'));
-
-  const execSync = require('child_process').execSync;
 
   const result = execSync(
     'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
@@ -190,11 +194,6 @@ async function main() {
 
   let currentChunk = result.toString('utf8').split('\n');
   console.log('currentChunk full', currentChunk);
-
-  // cut currentChunk in 1/3 for now
-  currentChunk = currentChunk.slice(0, currentChunk.length / 3);
-
-  console.log('currentChunk cut', currentChunk);
 
   for (const testPath of currentChunk) {
     const dir = 'test/test-results/e2e';
