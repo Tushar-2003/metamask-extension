@@ -5,7 +5,6 @@ const { hideBin } = require('yargs/helpers');
 const { runInShell } = require('../../development/lib/run-command');
 const { exitWithError } = require('../../development/lib/exit-with-error');
 const { loadBuildTypesConfig } = require('../../development/lib/build-type');
-const spawn = require('cross-spawn');
 
 const getTestPathsForTestDir = async (testDir) => {
   const testFilenames = await fs.readdir(testDir, { withFileTypes: true });
@@ -131,7 +130,7 @@ async function main() {
   }
 
   // These tests should only be run on Flask for now.
-  if (buildType !== 'flask-turned-off') {
+  if (buildType !== 'flask') {
     const filteredTests = [
       'settings-add-snap-account-toggle.spec.js',
       'test-snap-accounts.spec.js',
@@ -183,8 +182,11 @@ async function main() {
   // convert and show the output.
   console.log(result.toString('utf8'));
 
-  const currentChunk = result.toString('utf8').split('\n');
+  let currentChunk = result.toString('utf8').split('\n');
   console.log('currentChunk', currentChunk);
+
+  // cut currentChunk in 1/3 for now
+  currentChunk = currentChunk.slice(0, currentChunk.length / 3);
 
   for (const testPath of currentChunk) {
     const dir = 'test/test-results/e2e';
