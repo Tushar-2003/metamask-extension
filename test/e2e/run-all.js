@@ -195,10 +195,13 @@ async function main() {
   let currentChunk = result.toString('utf8').split('\n');
   console.log('currentChunk full', currentChunk);
 
+  const dir = 'test/test-results/e2e';
+  fs.promises.mkdir(dir, { recursive: true });
+
   for (const testPath of currentChunk) {
-    const dir = 'test/test-results/e2e';
-    fs.promises.mkdir(dir, { recursive: true });
-    await runInShell('node', [...args, testPath]);
+    if (testPath !== '') {
+      await runInShell('node', [...args, testPath]);
+    }
   }
 }
 
