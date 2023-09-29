@@ -512,6 +512,7 @@
     "loose-envify": "^1.4.0",
     "madge": "^6.1.0",
     "mocha": "^9.2.2",
+    "mocha-junit-reporter": "^2.2.1",
     "mockttp": "^2.6.0",
     "nock": "^13.2.9",
     "node-fetch": "^2.6.1",

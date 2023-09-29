@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
-const { execSync } = require('child_process');
 const { runInShell } = require('../../development/lib/run-command');
 const { exitWithError } = require('../../development/lib/exit-with-error');
 const { loadBuildTypesConfig } = require('../../development/lib/build-type');
@@ -26,17 +26,6 @@ const getTestPathsForTestDir = async (testDir) => {
 
   return testPaths;
 };
-
-// Heavily inspired by: https://stackoverflow.com/a/51514813
-// Splits the array into totalChunks chunks with a decent spread of items in each chunk
-function chunk(array, totalChunks) {
-  const copyArray = [...array];
-  const result = [];
-  for (let chunkIndex = totalChunks; chunkIndex > 0; chunkIndex--) {
-    result.push(copyArray.splice(0, Math.ceil(copyArray.length / chunkIndex)));
-  }
-  return result;
-}
 
 async function main() {
   const { argv } = yargs(hideBin(process.argv))
@@ -170,33 +159,17 @@ async function main() {
   }
 
   // For running E2Es in parallel in CI
-
-  // await spawn('circleci', [
-  //   '-c',
-  //   'tests glob /home/circleci/project/test/e2e/**/*.spec.js | circleci tests split --split-by=timings --timings-type=filename --time-default=30s > currentChunk.txt',
-  // ]);
-
-  console.log('full testPaths', testPaths.join('\n'));
-
-  // // cut testPaths in 1/4 for now
-  // testPaths = testPaths.slice(0, testPaths.length / 4);
-
-  // console.log('cut testPaths', testPaths.join('\n'));
-
   fs.writeFileSync('testList.txt', testPaths.join('\n'));
 
+  // use `circleci tests split` on `testList.txt`
   const result = execSync(
     'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
   );
 
-  // convert and show the output.
-  console.log(result.toString('utf8'));
+  // take the line-delimited result and split into an array
+  const currentChunk = result.toString('utf8').split('\n');
 
-  let currentChunk = result.toString('utf8').split('\n');
-  console.log('currentChunk full', currentChunk);
-
-  const dir = 'test/test-results/e2e';
-  fs.promises.mkdir(dir, { recursive: true });
+  fs.promises.mkdir('test/test-results/e2e', { recursive: true });
 
   for (const testPath of currentChunk) {
     if (testPath !== '') {

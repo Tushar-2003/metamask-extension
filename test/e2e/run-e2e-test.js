@@ -100,8 +100,6 @@ async function main() {
     throw error;
   }
 
-  const testFileName = path.basename(e2eTestPath);
-
   if (debug) {
     process.env.E2E_DEBUG = 'true';
   }

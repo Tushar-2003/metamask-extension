@@ -604,13 +604,6 @@ jobs:
               yarn test:e2e:chrome --retries 2 --debug
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -669,13 +662,6 @@ jobs:
               yarn test:e2e:chrome:rpc --retries 2
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -705,13 +691,6 @@ jobs:
               yarn test:e2e:chrome:rpc --retries 2 --debug --build-type=mmi
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -742,13 +721,6 @@ jobs:
               yarn test:e2e:firefox:snaps --retries 2 --debug --build-type=main
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -779,13 +751,6 @@ jobs:
               yarn test:e2e:chrome:snaps --debug --build-type=main
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -823,13 +788,6 @@ jobs:
               yarn test:e2e:firefox:snaps --debug --build-type=flask
             fi
           no_output_timeout: 20m
-      # - run:
-      #     name: Merge JUnit report
-      #     command: |
-      #       if [ "$(ls -A test/test-results/e2e)" ]; then
-      #         yarn test:e2e:report
-      #       fi
-      #     when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -867,13 +825,6 @@ jobs:
               yarn test:e2e:chrome:snaps --retries 2 --debug --build-type=flask
             fi
           no_output_timeout: 20m
-      # - run:
-      #     name: Merge JUnit report
-      #     command: |
-      #       if [ "$(ls -A test/test-results/e2e)" ]; then
-      #         yarn test:e2e:report
-      #       fi
-      #     when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -904,13 +855,6 @@ jobs:
               yarn test:e2e:chrome:mmi --retries 2 --debug --build-type=mmi
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
@@ -941,13 +885,6 @@ jobs:
               yarn test:e2e:firefox --retries 2 --debug
             fi
           no_output_timeout: 20m
-      - run:
-          name: Merge JUnit report
-          command: |
-            if [ "$(ls -A test/test-results/e2e)" ]; then
-              yarn test:e2e:report
-            fi
-          when: always
       - store_artifacts:
           path: test-artifacts
           destination: test-artifacts
