@@ -168,7 +168,7 @@ async function main() {
     'circleci tests run --command=">currentChunk.txt xargs echo" --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
   );
 
-  // take the line-delimited result and split into an array
+  // take the space-delimited result and split into an array
   const currentChunk = fs
     .readFileSync('currentChunk.txt', { encoding: 'utf8' })
     .split(' ');
@@ -181,8 +181,9 @@ async function main() {
   //     '" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
   // );
 
-  for (const testPath of currentChunk) {
+  for (let testPath of currentChunk) {
     if (testPath !== '') {
+      testPath = testPath.replace('\n', ''); // sometimes there's a newline at the end of the testPath
       await runInShell('node', [...args, testPath]);
     }
   }
