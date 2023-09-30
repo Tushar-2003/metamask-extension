@@ -165,7 +165,7 @@ async function main() {
   // 1. split the test files into chunks based on how long they take to run
   // 2. support "Rerun failed tests" on CircleCI
   execSync(
-    'circleci tests run --command=">currentChunk.txt xargs echo" --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
+    'circleci tests run --command=">currentChunk.txt xargs echo" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
   );
 
   // take the space-delimited result and split into an array
@@ -174,12 +174,6 @@ async function main() {
     .split(' ');
 
   fs.promises.mkdir('test/test-results/e2e', { recursive: true });
-
-  // execSync(
-  //   'circleci tests run --command="xargs node ' +
-  //     args.join(' ') +
-  //     '" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
-  // );
 
   for (let testPath of currentChunk) {
     if (testPath !== '') {
