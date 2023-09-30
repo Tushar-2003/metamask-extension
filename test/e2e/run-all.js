@@ -161,27 +161,31 @@ async function main() {
   // For running E2Es in parallel in CI
   fs.writeFileSync('testList.txt', testPaths.join('\n'));
 
-  // use `circleci tests split` on `testList.txt`
-  // const result = execSync(
-  //   'circleci tests split --split-by=timings --timings-type=filename --time-default=30s testList.txt',
-  // );
+  // Use `circleci tests run` on `testList.txt` to do two things:
+  // 1. split the test files into chunks based on how long they take to run
+  // 2. support "Rerun failed tests" on CircleCI
+  execSync(
+    'circleci tests run --command=">currentChunk.txt xargs echo" --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
+  );
 
   // take the line-delimited result and split into an array
-  // const currentChunk = result.toString('utf8').split('\n');
+  const currentChunk = fs
+    .readFileSync('currentChunk.txt', { encoding: 'utf8' })
+    .split(' ');
 
   fs.promises.mkdir('test/test-results/e2e', { recursive: true });
 
-  execSync(
-    'circleci tests run --command="xargs node ' +
-      args.join(' ') +
-      '" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
-  );
+  // execSync(
+  //   'circleci tests run --command="xargs node ' +
+  //     args.join(' ') +
+  //     '" --verbose --split-by=timings --timings-type=filename --time-default=30s < testList.txt',
+  // );
 
-  // for (const testPath of currentChunk) {
-  //   if (testPath !== '') {
-  //     await runInShell('node', [...args, testPath]);
-  //   }
-  // }
+  for (const testPath of currentChunk) {
+    if (testPath !== '') {
+      await runInShell('node', [...args, testPath]);
+    }
+  }
 }
 
 main().catch((error) => {
