@@ -562,7 +562,14 @@ export enum MetaMetricsEventName {
   ProviderMethodCalled = 'Provider Method Called',
   PublicAddressCopied = 'Public Address Copied',
   QuoteError = 'Quote Error',
+<<<<<<< HEAD
   SettingsUpdated = 'Settings Updated',
+=======
+  ServiceWorkerRestarted = 'Service Worker Restarted',
+  ///: BEGIN:ONLY_INCLUDE_IN(blockaid)
+  SettingsUpdated = 'Settings Updated',
+  ///: END:ONLY_INCLUDE_IN
+>>>>>>> c3645a3926 (update experimental settings to jyoti PR.)
   SignatureApproved = 'Signature Approved',
   SignatureFailed = 'Signature Failed',
   SignatureRejected = 'Signature Rejected',
@@ -645,9 +652,6 @@ export enum MetaMetricsEventName {
   ///: END:ONLY_INCLUDE_IN
   ///: BEGIN:ONLY_INCLUDE_IN(keyring-snaps)
   AddSnapAccountEnabled = 'Add Snap Account Enabled',
-  ///: END:ONLY_INCLUDE_IN
-  ///: BEGIN:ONLY_INCLUDE_IN(blockaid)
-  SecurityAlertsEnabled = 'Enabled/Disable Security Alerts',
   ///: END:ONLY_INCLUDE_IN
 }
 
