@@ -11,12 +11,32 @@ const defaultOptions = {
   quiet: true,
 };
 
+// This is a "static" variable that holds the default Ganache instance
+let ganacheInstanceOnDefaultPort = null;
+
 class Ganache {
   async start(opts) {
     const options = { ...defaultOptions, ...opts };
     const { port } = options;
+
     this._server = ganache.server(options);
-    await this._server.listen(port);
+
+    try {
+      await this._server.listen(port);
+    } catch (e) {
+      console.log('Caught error starting Ganache server', e);
+
+      if (ganacheInstanceOnDefaultPort) {
+        console.log('Closing old Ganache instance and restarting');
+        ganacheInstanceOnDefaultPort.quit();
+        await this._server.listen(port);
+      }
+    }
+
+    // Set the "static" variable
+    if (port === defaultOptions.port) {
+      ganacheInstanceOnDefaultPort = this; // eslint-disable-line consistent-this
+    }
   }
 
   getProvider() {
@@ -48,7 +68,13 @@ class Ganache {
     if (!this._server) {
       throw new Error('Server not running yet');
     }
-    await this._server.close();
+
+    try {
+      await this._server.close();
+    } catch (e) {
+      // On some systems, and in certain unknown cases, the ganache server does not close properly
+      console.log('Caught error closing Ganache server', e);
+    }
   }
 }
 
