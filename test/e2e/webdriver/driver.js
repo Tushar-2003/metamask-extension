@@ -6,6 +6,8 @@ const {
   error: webdriverError,
   Key,
   until,
+  ThenableWebDriver, // eslint-disable-line no-unused-vars -- this is imported for JSDoc
+  WebElement, // eslint-disable-line no-unused-vars -- this is imported for JSDoc
 } = require('selenium-webdriver');
 const cssToXPath = require('css-to-xpath');
 const { retry } = require('../../../development/lib/retry');
@@ -15,7 +17,7 @@ const { retry } = require('../../../development/lib/retry');
  * that match the playwright API for Elements
  *
  * @param {object} element - Selenium Element
- * @param driver
+ * @param {!ThenableWebDriver} driver
  * @returns {object} modified Selenium Element
  */
 function wrapElementWithAPI(element, driver) {
@@ -205,6 +207,10 @@ class Driver {
 
   // Element interactions
 
+  /**
+   * @param {*} rawLocator
+   * @returns {WebElement}
+   */
   async findElement(rawLocator) {
     const locator = this.buildLocator(rawLocator);
     const element = await this.driver.wait(
