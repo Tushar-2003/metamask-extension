@@ -557,8 +557,6 @@ export default class ConfirmApproveContent extends Component {
       customNonceValue,
       updateCustomNonce,
       showCustomizeNonceModal,
-      supportsEIP1559,
-      useCurrencyRateCheck,
     } = this.props;
     const { showFullTxDetails, setShowContractDetails } = this.state;
 
