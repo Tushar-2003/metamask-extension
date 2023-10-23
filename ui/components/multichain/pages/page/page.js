@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Box } from '../../../component-library';
 import {
+  BackgroundColor,
   BlockSize,
   Display,
   FlexDirection,
+  JustifyContent,
 } from '../../../../helpers/constants/design-system';
 
 export const Page = ({
@@ -17,16 +19,27 @@ export const Page = ({
 }) => {
   return (
     <Box
-      display={Display.Flex}
       width={BlockSize.Full}
-      flexDirection={FlexDirection.Column}
-      style={{ height: '100%' }}
-      className={classnames('multichain-page', className)}
-      {...props}
+      height={BlockSize.Full}
+      display={Display.Flex}
+      flexDirection={FlexDirection.Row}
+      justifyContent={JustifyContent.center}
+      backgroundColor={BackgroundColor.backgroundAlternative}
+      className="multichain-page"
     >
-      {header}
-      {children}
-      {footer}
+      <Box
+        width={BlockSize.Full}
+        height={BlockSize.Full}
+        display={Display.Flex}
+        flexDirection={FlexDirection.Column}
+        backgroundColor={BackgroundColor.backgroundDefault}
+        className={classnames('multichain-page__inner-container', className)}
+        {...props}
+      >
+        {header}
+        {children}
+        {footer}
+      </Box>
     </Box>
   );
 };
