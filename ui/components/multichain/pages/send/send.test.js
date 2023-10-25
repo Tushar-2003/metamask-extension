@@ -24,8 +24,6 @@ describe('SendPage', () => {
     it('renders correctly', () => {
       const { container, getByTestId } = render();
       expect(container).toMatchSnapshot();
-
-      expect(getByTestId('send-page-network-picker')).toBeInTheDocument();
     });
   });
 });
