@@ -1,21 +1,20 @@
 import { strict as assert } from 'assert';
-import sinon from 'sinon';
-import proxyquire from 'proxyquire';
-import {
-  ListNames,
-  METAMASK_STALELIST_URL,
-  METAMASK_HOTLIST_DIFF_URL,
-  PHISHING_CONFIG_BASE_URL,
-  METAMASK_STALELIST_FILE,
-  METAMASK_HOTLIST_DIFF_FILE,
-} from '@metamask/phishing-controller';
 import { ApprovalRequestNotFoundError } from '@metamask/approval-controller';
 import { PermissionsRequestNotFoundError } from '@metamask/permission-controller';
+import {
+  ListNames,
+  METAMASK_HOTLIST_DIFF_FILE,
+  METAMASK_HOTLIST_DIFF_URL,
+  METAMASK_STALELIST_FILE,
+  METAMASK_STALELIST_URL,
+  PHISHING_CONFIG_BASE_URL,
+} from '@metamask/phishing-controller';
 import nock from 'nock';
+import proxyquire from 'proxyquire';
+import sinon from 'sinon';
+import { startNewGanache } from '../../test/e2e/ganache';
 
-const Ganache = require('../../test/e2e/ganache');
-
-const ganacheServer = new Ganache();
+let ganacheServer;
 
 const browserPolyfillMock = {
   runtime: {
@@ -62,7 +61,7 @@ describe('MetaMaskController', function () {
   const noop = () => undefined;
 
   before(async function () {
-    await ganacheServer.start();
+    ganacheServer = await startNewGanache();
   });
 
   beforeEach(function () {

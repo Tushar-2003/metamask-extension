@@ -12,9 +12,9 @@ const {
   openDapp,
 } = require('./helpers');
 const { buildWebDriver } = require('./webdriver');
-const Ganache = require('./ganache');
+const { startNewGanache } = require('./ganache');
 
-const ganacheServer = new Ganache();
+let ganacheServer;
 const dappPort = 8080;
 
 describe('MetaMask @no-mmi', function () {
@@ -27,7 +27,7 @@ describe('MetaMask @no-mmi', function () {
   let failed = false;
 
   before(async function () {
-    await ganacheServer.start();
+    ganacheServer = await startNewGanache();
     const dappDirectory = path.resolve(
       __dirname,
       '..',

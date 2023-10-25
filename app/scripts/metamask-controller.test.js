@@ -1,36 +1,35 @@
 /**
  * @jest-environment node
  */
+import { ControllerMessenger } from '@metamask/base-controller';
+import { NetworkType } from '@metamask/controller-utils';
+import { LogType, LoggingController } from '@metamask/logging-controller';
+import {
+  ListNames,
+  METAMASK_HOTLIST_DIFF_FILE,
+  METAMASK_HOTLIST_DIFF_URL,
+  METAMASK_STALELIST_FILE,
+  METAMASK_STALELIST_URL,
+  PHISHING_CONFIG_BASE_URL,
+} from '@metamask/phishing-controller';
+import { wordlist as englishWordlist } from '@metamask/scure-bip39/dist/wordlists/english';
+import EthQuery from 'eth-query';
 import { cloneDeep } from 'lodash';
 import nock from 'nock';
 import { obj as createThoughStream } from 'through2';
-import EthQuery from 'eth-query';
-import { wordlist as englishWordlist } from '@metamask/scure-bip39/dist/wordlists/english';
-import {
-  ListNames,
-  METAMASK_STALELIST_URL,
-  METAMASK_HOTLIST_DIFF_URL,
-  PHISHING_CONFIG_BASE_URL,
-  METAMASK_STALELIST_FILE,
-  METAMASK_HOTLIST_DIFF_FILE,
-} from '@metamask/phishing-controller';
-import { NetworkType } from '@metamask/controller-utils';
-import { ControllerMessenger } from '@metamask/base-controller';
-import { LoggingController, LogType } from '@metamask/logging-controller';
-import { TransactionStatus } from '../../shared/constants/transaction';
-import createTxMeta from '../../test/lib/createTxMeta';
-import { NETWORK_TYPES } from '../../shared/constants/network';
-import { createTestProviderTools } from '../../test/stub/provider';
 import { HardwareDeviceNames } from '../../shared/constants/hardware-wallets';
 import { KeyringType } from '../../shared/constants/keyring';
 import { LOG_EVENT } from '../../shared/constants/logs';
-import { deferredPromise } from './lib/util';
+import { NETWORK_TYPES } from '../../shared/constants/network';
+import { TransactionStatus } from '../../shared/constants/transaction';
+import { startNewGanache } from '../../test/e2e/ganache';
+import createTxMeta from '../../test/lib/createTxMeta';
+import { createTestProviderTools } from '../../test/stub/provider';
 import TransactionController from './controllers/transactions';
+import { deferredPromise } from './lib/util';
 import MetaMaskController from './metamask-controller';
 
-const Ganache = require('../../test/e2e/ganache');
-
-const ganacheServer = new Ganache();
+let ganacheServer;
 
 const browserPolyfillMock = {
   runtime: {
@@ -208,7 +207,7 @@ const noop = () => undefined;
 
 describe('MetaMaskController', () => {
   beforeAll(async () => {
-    await ganacheServer.start();
+    ganacheServer = await startNewGanache();
   });
 
   beforeEach(() => {
