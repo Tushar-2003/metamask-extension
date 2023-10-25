@@ -8,7 +8,7 @@ const { difference } = require('lodash');
 const createStaticServer = require('../../development/create-static-server');
 const { tEn } = require('../lib/i18n-helpers');
 const { setupMocking } = require('./mock-e2e');
-const Ganache = require('./ganache');
+const { startNewGanache } = require('./ganache');
 const FixtureServer = require('./fixture-server');
 const PhishingWarningPageServer = require('./phishing-warning-page-server');
 const { buildWebDriver } = require('./webdriver');
@@ -45,7 +45,7 @@ async function withFixtures(options, testSuite) {
     },
   } = options;
   const fixtureServer = new FixtureServer();
-  const ganacheServer = new Ganache();
+  let ganacheServer;
   const https = await mockttp.generateCACertificate();
   const mockServer = mockttp.getLocal({ https, cors: true });
   let secondaryGanacheServer;
@@ -57,7 +57,7 @@ async function withFixtures(options, testSuite) {
   let driver;
   let failed = false;
   try {
-    await ganacheServer.start(ganacheOptions);
+    ganacheServer = await startNewGanache(ganacheOptions);
     let contractRegistry;
 
     if (smartContract) {
@@ -68,8 +68,7 @@ async function withFixtures(options, testSuite) {
 
     if (ganacheOptions?.concurrent) {
       const { port, chainId, ganacheOptions2 } = ganacheOptions.concurrent;
-      secondaryGanacheServer = new Ganache();
-      await secondaryGanacheServer.start({
+      secondaryGanacheServer = await startNewGanache({
         blockTime: 2,
         chain: { chainId },
         port,
