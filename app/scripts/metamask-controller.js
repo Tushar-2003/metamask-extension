@@ -4884,6 +4884,15 @@ export default class MetamaskController extends EventEmitter {
   };
   ///: END:ONLY_INCLUDE_IN
 
+  // updateNetworksList = (sortedNetworkList) => {
+  //   try {
+  //     this.sortNetworkListController.update(sortedNetworkList);
+  //   } catch (err) {
+  //     log.error(err.message);
+  //     throw err;
+  //   }
+  // };
+
   rejectPermissionsRequest = (requestId) => {
     try {
       this.permissionController.rejectPermissionsRequest(requestId);
