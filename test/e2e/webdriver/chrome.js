@@ -15,7 +15,14 @@ const HTTPS_PROXY_HOST = '127.0.0.1:8000';
  */
 class ChromeDriver {
   static async build({ openDevToolsForTabs, port }) {
-    const args = [`load-extension=${process.cwd()}/dist/chrome`];
+    let args;
+    if (process.env.MULTIPROVIDER) {
+      args = [
+        `load-extension=${process.cwd()}/dist/chrome,${process.cwd()}/dist/chrome2`,
+      ];
+    } else {
+      args = [`load-extension=${process.cwd()}/dist/chrome`];
+    }
     if (openDevToolsForTabs) {
       args.push('--auto-open-devtools-for-tabs');
     }
