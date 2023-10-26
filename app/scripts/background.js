@@ -756,7 +756,6 @@ export function setupController(
     const waitingForUnlockCount =
       controller.appStateController.waitingForUnlock.length;
     const queuedRequestsCount = controller.queuedRequestController.length();
-
     return waitingForUnlockCount + queuedRequestsCount;
   }
 
