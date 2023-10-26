@@ -218,6 +218,7 @@ import PreferencesController from './controllers/preferences';
 import AppStateController from './controllers/app-state';
 import CachedBalancesController from './controllers/cached-balances';
 import AlertController from './controllers/alert';
+import SymbolToMatchController from './controllers/symbol-to-match';
 import OnboardingController from './controllers/onboarding';
 import Backup from './lib/backup';
 import DecryptMessageController from './controllers/decrypt-message';
@@ -1241,6 +1242,27 @@ export default class MetamaskController extends EventEmitter {
       preferencesStore: this.preferencesController.store,
     });
 
+    const symbolToMatchControllerMessenger =
+      this.controllerMessenger.getRestricted({
+        name: 'SymbolToMatchController',
+        allowedActions: ['KeyringController:getState'],
+        allowedEvents: [
+          'NetworkController:stateChange',
+          'KeyringController:lock',
+          'KeyringController:unlock',
+        ],
+      });
+
+    this.symbolToMatchController = new SymbolToMatchController({
+      initState: initState.SymbolToMatchController,
+      messenger: symbolToMatchControllerMessenger,
+      network: this.networkController,
+      preferencesStore: this.preferencesController.store,
+      symbol: this.networkController.state.providerConfig.ticker,
+      tokens: this.tokensController.state.tokens,
+      assetsContractController: this.assetsContractController,
+    });
+
     ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
     this.custodyController = new CustodyController({
       initState: initState.CustodyController,
@@ -1670,6 +1692,7 @@ export default class MetamaskController extends EventEmitter {
       NetworkController: this.networkController,
       CachedBalancesController: this.cachedBalancesController.store,
       AlertController: this.alertController.store,
+      SymbolToMatchController: this.symbolToMatchController.store,
       OnboardingController: this.onboardingController.store,
       PermissionController: this.permissionController,
       PermissionLogController: this.permissionLogController.store,
@@ -1720,6 +1743,7 @@ export default class MetamaskController extends EventEmitter {
         AddressBookController: this.addressBookController,
         CurrencyController: this.currencyRateController,
         AlertController: this.alertController.store,
+        SymbolToMatchController: this.symbolToMatchController.store,
         OnboardingController: this.onboardingController.store,
         PermissionController: this.permissionController,
         PermissionLogController: this.permissionLogController.store,
@@ -2318,6 +2342,7 @@ export default class MetamaskController extends EventEmitter {
     const {
       addressBookController,
       alertController,
+      symbolToMatchController,
       appStateController,
       keyringController,
       nftController,
@@ -2676,6 +2701,15 @@ export default class MetamaskController extends EventEmitter {
         alertController.setUnconnectedAccountAlertShown.bind(alertController),
       setWeb3ShimUsageAlertDismissed:
         alertController.setWeb3ShimUsageAlertDismissed.bind(alertController),
+
+      // symbol to match controller
+      setSymbolToMatch: symbolToMatchController.setSymbolToMatch.bind(
+        symbolToMatchController,
+      ),
+      setSymbolTokensToMatch:
+        symbolToMatchController.setSymbolTokensToMatch.bind(
+          symbolToMatchController,
+        ),
 
       // permissions
       removePermissionsFor: this.removePermissionsFor,

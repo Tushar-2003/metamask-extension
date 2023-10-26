@@ -4,6 +4,8 @@ import {
   getTokenExchangeRates,
   getCurrentCurrency,
   getShouldShowFiat,
+  getOriginalTokensSymbol,
+  getCurrentChainId,
 } from '../selectors';
 import { getTokenFiatAmount } from '../helpers/utils/token-util';
 import { getConversionRate } from '../ducks/metamask/metamask';
@@ -36,7 +38,14 @@ export function useTokenFiatAmount(
   const conversionRate = useSelector(getConversionRate);
   const currentCurrency = useSelector(getCurrentCurrency);
   const userPrefersShownFiat = useSelector(getShouldShowFiat);
-  const showFiat = overrides.showFiat ?? userPrefersShownFiat;
+  const originalTokensSymbol = useSelector(getOriginalTokensSymbol);
+  const chainId = useSelector(getCurrentChainId);
+
+  const isSymbolMatch =
+    originalTokensSymbol?.[chainId]?.[tokenAddress] === tokenSymbol;
+
+  const showFiat =
+    overrides.showFiat ?? (userPrefersShownFiat && isSymbolMatch);
   const contractExchangeTokenKey = Object.keys(contractExchangeRates).find(
     (key) => isEqualCaseInsensitive(key, tokenAddress),
   );

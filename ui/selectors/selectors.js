@@ -614,6 +614,19 @@ export function getIsLineaMainnet(state) {
   return chainId === CHAIN_IDS.LINEA_MAINNET;
 }
 
+export function getIsMatchedNetwork(state) {
+  const provider = getProviderConfig(state);
+
+  return (
+    provider.ticker ===
+    state.metamask.symbolToMatch?.nativeSymbolToMatch[provider.chainId]
+  );
+}
+
+export function getOriginalTokensSymbol(state) {
+  return state.metamask.symbolToMatch.tokensSymbolToMatch;
+}
+
 export function getIsTestnet(state) {
   const chainId = getCurrentChainId(state);
   return TEST_CHAINS.includes(chainId);
@@ -660,6 +673,11 @@ export function getShouldShowFiat(state) {
       useCurrencyRateCheck &&
       conversionRate,
   );
+}
+
+export function getShouldShowFiatForNativeCurrency(state) {
+  const isMatchedNetwork = getIsMatchedNetwork(state);
+  return getShouldShowFiat(state) && isMatchedNetwork;
 }
 
 export function getShouldHideZeroBalanceTokens(state) {

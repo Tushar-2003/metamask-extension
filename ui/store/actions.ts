@@ -2288,6 +2288,39 @@ export function setActiveNetwork(
   };
 }
 
+export function setSymbolToMatch(
+  chainId: string,
+  symbol: string,
+): ThunkAction<void, MetaMaskReduxState, unknown, AnyAction> {
+  return async (dispatch) => {
+    log.debug(`background.setSymbolToMatch: ${chainId}, ${symbol}`);
+    try {
+      await submitRequestToBackground('setSymbolToMatch', [chainId, symbol]);
+    } catch (error) {
+      logErrorWithMessage(error);
+      dispatch(displayWarning('Had a problem changing networks!'));
+    }
+  };
+}
+
+export function setSymbolTokensToMatch(
+  tokens: Token[],
+  chainId: string,
+): ThunkAction<void, MetaMaskReduxState, unknown, AnyAction> {
+  return async (dispatch) => {
+    log.debug(`background.setSymbolTokensToMatch: ${tokens} ${chainId}`);
+    try {
+      await submitRequestToBackground('setSymbolTokensToMatch', [
+        tokens,
+        chainId,
+      ]);
+    } catch (error) {
+      logErrorWithMessage(error);
+      dispatch(displayWarning('Had a problem changing networks!'));
+    }
+  };
+}
+
 export function rollbackToPreviousProvider(): ThunkAction<
   void,
   MetaMaskReduxState,

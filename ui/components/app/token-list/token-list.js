@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import TokenCell from '../token-cell';
 import { useI18nContext } from '../../../hooks/useI18nContext';
 import { Box } from '../../component-library';
@@ -8,9 +9,17 @@ import {
   Display,
   JustifyContent,
 } from '../../../helpers/constants/design-system';
+import { setSymbolTokensToMatch } from '../../../store/actions';
+import { getCurrentChainId } from '../../../selectors';
 
 export default function TokenList({ onTokenClick, tokens, loading = false }) {
   const t = useI18nContext();
+  const chainId = useSelector(getCurrentChainId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSymbolTokensToMatch(tokens, chainId));
+  }, [tokens, chainId]);
 
   if (loading) {
     return (

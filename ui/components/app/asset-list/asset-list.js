@@ -6,7 +6,7 @@ import { PRIMARY, SECONDARY } from '../../../helpers/constants/common';
 import { useUserPreferencedCurrency } from '../../../hooks/useUserPreferencedCurrency';
 import {
   getSelectedAccountCachedBalance,
-  getShouldShowFiat,
+  getShouldShowFiatForNativeCurrency,
   getNativeCurrencyImage,
   getDetectedTokensInCurrentNetwork,
   getIstokenDetectionInactiveOnNonMainnetSupportedNetwork,
@@ -44,7 +44,7 @@ const AssetList = ({ onClickAsset }) => {
   const [showDetectedTokens, setShowDetectedTokens] = useState(false);
   const selectedAccountBalance = useSelector(getSelectedAccountCachedBalance);
   const nativeCurrency = useSelector(getNativeCurrency);
-  const showFiat = useSelector(getShouldShowFiat);
+  const showFiat = useSelector(getShouldShowFiatForNativeCurrency);
   const trackEvent = useContext(MetaMetricsContext);
   const balance = useSelector(getSelectedAccountCachedBalance);
   const balanceIsLoading = !balance;
