@@ -173,6 +173,18 @@ async function mockServerCalls(mockServer) {
   return [
     await mockServer
       .forPost('https://api.segment.io/v1/batch')
+      .withJsonBodyIncluding({
+        batch: [
+          {
+            type: 'track',
+            event: 'Signature Rejected',
+            properties: {
+              action: 'Sign Request',
+              category: 'Transactions',
+            },
+          },
+        ],
+      })
       .thenCallback(() => {
         return {
           statusCode: 200,

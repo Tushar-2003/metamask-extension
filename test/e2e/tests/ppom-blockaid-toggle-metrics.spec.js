@@ -175,9 +175,9 @@ async function mockServerCalls(mockServer) {
         batch: [
           {
             type: 'track',
-            event: 'Enabled/Disable Security Alerts',
+            event: 'Settings Updated',
             properties: {
-              enabled: true,
+              blockaid_alerts_enabled: true,
               category: 'Settings',
             },
           },
@@ -194,9 +194,9 @@ async function mockServerCalls(mockServer) {
         batch: [
           {
             type: 'track',
-            event: 'Enabled/Disable Security Alerts',
+            event: 'Settings Updated',
             properties: {
-              enabled: false,
+              blockaid_alerts_enabled: false,
               category: 'Settings',
             },
           },
@@ -256,9 +256,9 @@ describe('PPOM Blockaid Alert - Metrics', function () {
         const events = await getEventPayloads(driver, mockedEndpoints);
 
         const toggleOnEvent = {
-          event: 'Enabled/Disable Security Alerts',
+          event: 'Settings Updated',
           properties: {
-            enabled: true,
+            blockaid_alerts_enabled: true,
             category: 'Settings',
           },
           userId: 'fake-metrics-id',
@@ -267,7 +267,7 @@ describe('PPOM Blockaid Alert - Metrics', function () {
         const matchToggleOnEvent = {
           event: events[0].event,
           properties: {
-            enabled: events[0].properties.enabled,
+            blockaid_alerts_enabled: events[0].properties.blockaid_alerts_enabled,
             category: events[0].properties.category,
           },
           userId: events[0].userId,
@@ -275,9 +275,9 @@ describe('PPOM Blockaid Alert - Metrics', function () {
         };
 
         const toggleOffEvent = {
-          event: 'Enabled/Disable Security Alerts',
+          event: 'Settings Updated',
           properties: {
-            enabled: false,
+            blockaid_alerts_enabled: false,
             category: 'Settings',
           },
           userId: 'fake-metrics-id',
@@ -286,15 +286,16 @@ describe('PPOM Blockaid Alert - Metrics', function () {
         const matchToggleOffEvent = {
           event: events[1].event,
           properties: {
-            enabled: events[1].properties.enabled,
+            blockaid_alerts_enabled: events[1].properties.blockaid_alerts_enabled,
             category: events[1].properties.category,
           },
           userId: events[1].userId,
           type: events[1].type,
         };
 
-        assert.deepStrictEqual(toggleOnEvent, matchToggleOnEvent);
-        assert.deepStrictEqual(toggleOffEvent, matchToggleOffEvent);
+        assert.equal(events.length, 2);
+        assert.deepEqual(toggleOnEvent, matchToggleOnEvent);
+        assert.deepEqual(toggleOffEvent, matchToggleOffEvent);
       },
     );
   });
