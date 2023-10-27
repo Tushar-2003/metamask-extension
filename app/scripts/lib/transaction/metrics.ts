@@ -1,10 +1,10 @@
 import { isHexString } from 'ethereumjs-util';
 import EthQuery from 'eth-query';
 import { BigNumber } from 'bignumber.js';
-import type { Provider } from '@metamask/network-controller';
 import { FetchGasFeeEstimateOptions } from '@metamask/gas-fee-controller';
 
 import { ORIGIN_METAMASK } from '../../../../shared/constants/app';
+import SafeEventEmitter from '@metamask/safe-event-emitter';
 import {
   determineTransactionAssetType,
   isEIP1559Transaction,
@@ -80,9 +80,14 @@ export type TransactionMetricsRequest = {
     standard?: TokenStandard;
   };
   getTransaction: (transactionId: string) => TransactionMeta;
+<<<<<<< HEAD:app/scripts/lib/transaction/metrics.ts
   provider: Provider;
   snapAndHardwareMessenger: SnapAndHardwareMessenger;
   trackEvent: (payload: any) => void;
+=======
+  snapAndHardwareMessenger: SnapAndHardwareMessenger;
+  provider: SafeEventEmitter;
+>>>>>>> 76ff6a43af (fixups):app/scripts/lib/transaction-metrics.ts
 };
 
 export const METRICS_STATUS_FAILED = 'failed on-chain';
