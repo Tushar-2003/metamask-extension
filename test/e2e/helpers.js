@@ -599,9 +599,9 @@ const defaultGanacheOptions = {
 
 const openActionMenuAndStartSendFlow = async (driver) => {
   // TODO: Update Test when Multichain Send Flow is added
-  // if (process.env.MULTICHAIN) {
-  //   return;
-  // }
+  if (process.env.MULTICHAIN) {
+    return;
+  }
   await driver.clickElement('[data-testid="eth-overview-send"]');
 };
 
