@@ -1,4 +1,3 @@
-const { strict: assert } = require('assert');
 const { withFixtures } = require('../helpers');
 const FixtureBuilder = require('../fixture-builder');
 const { TEST_SNAPS_WEBSITE_URL } = require('./enums');
@@ -88,10 +87,10 @@ describe('Test Snap Notification', function () {
         await driver.clickElement(
           '[data-testid="account-options-menu-button"]',
         );
-        const notificationResult = await driver.findElement(
-          '[data-testid="global-menu-notification-count"]',
-        );
-        assert.equal(await notificationResult.getText(), '1');
+        await driver.findElement({
+          css: '[data-testid="global-menu-notification-count"]',
+          text: '1',
+        });
         await driver.clickElement('.menu__background');
 
         // try to click on the account menu icon (via xpath)
@@ -108,13 +107,10 @@ describe('Test Snap Notification', function () {
         await driver.delay(500);
 
         // look for the correct text in notifications (via xpath)
-        const notificationResultMessage = await driver.findElement(
-          '.notifications__item__details__message',
-        );
-        assert.equal(
-          await notificationResultMessage.getText(),
-          'Hello from within MetaMask!',
-        );
+        await driver.findElement({
+          css: '.notifications__item__details__message',
+          text: 'Hello from within MetaMask!',
+        });
       },
     );
   });
