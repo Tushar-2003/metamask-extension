@@ -1107,6 +1107,9 @@ export function getSortedAnnouncementsToShow(state) {
   return announcementsSortedByDate;
 }
 
+export function getOrderedNetworksList(state) {
+  return state.metamask.networksList;
+}
 export function getShowRecoveryPhraseReminder(state) {
   const {
     recoveryPhraseReminderLastShown,
