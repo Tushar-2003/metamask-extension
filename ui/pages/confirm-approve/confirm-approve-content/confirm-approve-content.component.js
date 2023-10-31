@@ -120,8 +120,6 @@ export default class ConfirmApproveContent extends Component {
         },
       };
 
-      console.log('eventParams', eventParams);
-
       this.context.trackEvent(eventParams);
     }
   }

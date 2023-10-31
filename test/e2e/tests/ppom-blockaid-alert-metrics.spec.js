@@ -3,80 +3,44 @@ const FixtureBuilder = require('../fixture-builder');
 const { mockServerJsonRpc } = require('../mock-server-json-rpc');
 
 const {
+  WINDOW_TITLES,
   defaultGanacheOptions,
+  openDapp,
   unlockWallet,
   withFixtures,
-  getEventPayloads,
-  openDapp,
 } = require('../helpers');
 
 const bannerAlertSelector = '[data-testid="security-provider-banner-alert"]';
 const selectedAddress = '0x5cfe73b6021e818b776b421b1c4db2474086a7e1';
-const selectedAddressWithoutPrefix = '5cfe73b6021e818b776b421b1c4db2474086a7e1';
+const mockMaliciousAddress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
 
-const CONTRACT_ADDRESS = {
-  BalanceChecker: '0xb1f8e55c7f64d203c1400b9d8555d050f94adf39',
-  FiatTokenV2_1: '0xa2327a938febf5fec13bacfb16ae10ecbc4cbdcf',
-  OffChainOracle: '0x52cbe0f49ccdd4dc6e9c13bab024eabd2842045b',
-  USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-};
+const expectedMaliciousTitle = 'This is a deceptive request';
 
-/**
- * mocks the segment api multiple times for specific payloads that we expect to
- * see when these tests are run. In this case we are looking for
- * 'Transaction Submitted' and 'Transaction Finalized'. In addition on the
- * first event of each series we require a field that should only appear in the
- * anonymized events so that we can guarantee order of seenRequests and can
- * properly make assertions. Do not use the constants from the metrics
- * constants files, because if these change we want a strong indicator to our
- * data team that the shape of data will change.
- *
- * @param {import('mockttp').Mockttp} mockServer
- * @returns {Promise<import('mockttp/dist/pluggable-admin').MockttpClientResponse>[]}
- */
+const testMaliciousConfigs = [
+  {
+    btnSelector: '#maliciousSeaport',
+    expectedDescription:
+      'If you approve this request, someone can steal your assets listed on OpenSea.',
+    expectedReason: 'seaport_farming',
+  },
+];
 
-async function mockServerCalls(mockServer) {
+async function mockInfura(mockServer) {
   await mockServerJsonRpc(mockServer, [
     ['eth_blockNumber'],
-    [
-      'eth_call',
-      {
-        methodResultVariant: 'balanceChecker',
-        params: [{ to: CONTRACT_ADDRESS.BalanceChecker }],
-      },
-    ],
-    [
-      'eth_call',
-      {
-        methodResultVariant: 'offchainOracle',
-        params: [{ to: CONTRACT_ADDRESS.OffChainOracle }],
-      },
-    ],
-    [
-      'eth_call',
-      {
-        methodResultVariant: 'balance',
-        params: [
-          {
-            accessList: [],
-            data: `0x70a08231000000000000000000000000${selectedAddressWithoutPrefix}`,
-            to: CONTRACT_ADDRESS.USDC,
-          },
-        ],
-      },
-    ],
+    ['eth_call'],
     ['eth_estimateGas'],
+    ['eth_feeHistory'],
     ['eth_gasPrice'],
     ['eth_getBalance'],
     ['eth_getBlockByNumber'],
-    [
-      'eth_getCode',
-      {
-        methodResultVariant: 'USDC',
-        params: [CONTRACT_ADDRESS.USDC],
-      },
-    ],
+    ['eth_getCode'],
+    ['eth_getTransactionCount'],
   ]);
+}
+
+async function mockInfuraWithMaliciousResponses(mockServer) {
+  await mockInfura(mockServer);
 
   await mockServer
     .forPost()
@@ -94,11 +58,11 @@ async function mockServerCalls(mockServer) {
             calls: [
               {
                 error: 'execution reverted',
-                from: CONTRACT_ADDRESS.USDC,
-                gas: '0x1d55c2c7',
-                gasUsed: '0xf0',
+                from: '0x0000000000000000000000000000000000000000',
+                gas: '0x1d55c2cb',
+                gasUsed: '0x39c',
                 input: '0x00000000',
-                to: CONTRACT_ADDRESS.FiatTokenV2_1,
+                to: mockMaliciousAddress,
                 type: 'DELEGATECALL',
                 value: '0x0',
               },
@@ -106,63 +70,9 @@ async function mockServerCalls(mockServer) {
             error: 'execution reverted',
             from: '0x0000000000000000000000000000000000000000',
             gas: '0x1dcd6500',
-            gasUsed: '0x6f79',
+            gasUsed: '0x721e',
             input: '0x00000000',
-            to: CONTRACT_ADDRESS.USDC,
-            type: 'CALL',
-            value: '0x0',
-          },
-        },
-      };
-    });
-
-  await mockServer
-    .forPost()
-    .withJsonBodyIncluding({
-      method: 'debug_traceCall',
-      params: [{ from: selectedAddress }],
-    })
-    .thenCallback((req) => {
-      const mockFakePhishingAddress =
-        '5fbdb2315678afecb367f032d93f642f64180aa3';
-
-      return {
-        statusCode: 200,
-        json: {
-          jsonrpc: '2.0',
-          id: req.body.json.id,
-          result: {
-            calls: [
-              {
-                from: CONTRACT_ADDRESS.USDC,
-                gas: '0x2923d',
-                gasUsed: '0x4cac',
-                input: `0xa9059cbb000000000000000000000000${mockFakePhishingAddress}0000000000000000000000000000000000000000000000000000000000000064`,
-                logs: [
-                  {
-                    address: CONTRACT_ADDRESS.USDC,
-                    data: '0x0000000000000000000000000000000000000000000000000000000000000064',
-                    topics: [
-                      '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
-                      `0x000000000000000000000000${selectedAddressWithoutPrefix}`,
-                      `0x000000000000000000000000${mockFakePhishingAddress}`,
-                    ],
-                  },
-                ],
-                output:
-                  '0x0000000000000000000000000000000000000000000000000000000000000001',
-                to: CONTRACT_ADDRESS.FiatTokenV2_1,
-                type: 'DELEGATECALL',
-                value: '0x0',
-              },
-            ],
-            from: selectedAddress,
-            gas: '0x30d40',
-            gasUsed: '0xbd69',
-            input: `0xa9059cbb000000000000000000000000${mockFakePhishingAddress}0000000000000000000000000000000000000000000000000000000000000064`,
-            output:
-              '0x0000000000000000000000000000000000000000000000000000000000000001',
-            to: CONTRACT_ADDRESS.USDC,
+            to: mockMaliciousAddress,
             type: 'CALL',
             value: '0x0',
           },
@@ -177,11 +87,17 @@ async function mockServerCalls(mockServer) {
         batch: [
           {
             type: 'track',
-            event: 'Signature Rejected',
-            properties: {
-              action: 'Sign Request',
-              category: 'Transactions',
-            },
+            // event: "Signature Requested",
+            // properties: {
+            //   action: "Sign Request",
+            //   category: "Transactions",
+            //   security_alert_reason: "seaport_farming",
+            //   security_alert_response: "Malicious",
+            //   type: "eth_signTypedData",
+            //   ui_customizations: [
+            //     "flagged_as_malicious"
+            //   ]
+            // },
           },
         ],
       })
@@ -193,8 +109,8 @@ async function mockServerCalls(mockServer) {
   ];
 }
 
-describe('PPOM Blockaid Alert - Metrics', function () {
-  it('It should successfully track showing banner alert', async function () {
+describe('Confirmation Security Alert - Blockaid @no-mmi', function () {
+  it('should show security alerts for malicious requests', async function () {
     await withFixtures(
       {
         dapp: true,
@@ -204,48 +120,65 @@ describe('PPOM Blockaid Alert - Metrics', function () {
           .withPreferencesController({
             securityAlertsEnabled: true,
           })
+          .withMetaMetricsController({
+            metaMetricsId: 'fake-metrics-id',
+            participateInMetaMetrics: true,
+          })
           .build(),
         defaultGanacheOptions,
-        testSpecificMock: mockServerCalls,
-        title: this.test.title,
+        testSpecificMock: mockInfuraWithMaliciousResponses,
+        title: this.test.fullTitle(),
       },
 
       async ({ driver, mockedEndpoint: mockedEndpoints }) => {
-        const expectedTitle = 'This is a deceptive request';
-        const expectedDescription =
-          'If you approve this request, a third party known for scams will take all your assets.';
-
         await driver.navigate();
         await unlockWallet(driver);
         await openDapp(driver);
 
-        // Click TestDapp button to send JSON-RPC request
-        await driver.clickElement('#maliciousERC20TransferButton');
+        for (const config of testMaliciousConfigs) {
+          const { expectedDescription, expectedReason, btnSelector } = config;
 
-        // Wait for confirmation pop-up
-        await driver.waitUntilXWindowHandles(3);
-        await driver.switchToWindowWithTitle('MetaMask Notification');
+          // Click TestDapp button to send JSON-RPC request
+          await driver.clickElement(btnSelector);
 
-        const bannerAlertFoundByTitle = await driver.findElement({
-          css: bannerAlertSelector,
-          text: expectedTitle,
-        });
-        const bannerAlertText = await bannerAlertFoundByTitle.getText();
+          // Wait for confirmation pop-up
+          const windowHandles = await driver.waitUntilXWindowHandles(3);
+          await driver.switchToWindowWithTitle(
+            WINDOW_TITLES.Notification,
+            windowHandles,
+          );
 
-        assert(
-          bannerAlertFoundByTitle,
-          `Banner alert not found. Expected Title: ${expectedTitle} \nExpected reason: transfer_farming\n`,
-        );
-        assert(
-          bannerAlertText.includes(expectedDescription),
-          `Unexpected banner alert description. Expected: ${expectedDescription} \nExpected reason: transfer_farming\n`,
-        );
+          // Find element by title
+          const bannerAlertFoundByTitle = await driver.findElement({
+            css: bannerAlertSelector,
+            text: expectedMaliciousTitle,
+          });
+          const bannerAlertText = await bannerAlertFoundByTitle.getText();
 
-        const events = await getEventPayloads(driver, mockedEndpoints);
+          assert(
+            bannerAlertFoundByTitle,
+            `Banner alert not found. Expected Title: ${expectedMaliciousTitle} \nExpected reason: ${expectedReason}\n`,
+          );
+          assert(
+            bannerAlertText.includes(expectedDescription),
+            `Unexpected banner alert description. Expected: ${expectedDescription} \nExpected reason: ${expectedReason}\n`,
+          );
 
-        console.log('Events: ', events);
+          await driver.clickElement({ text: 'See details', tag: 'p' });
 
-        // await driver.delay(30000);
+          await driver.clickElement({ text: 'Contact us', tag: 'a' });
+
+          // Wait for confirmation pop-up to close
+          await driver.clickElement({ text: 'Reject', tag: 'button' });
+          await driver.switchToWindowWithTitle(
+            WINDOW_TITLES.TestDApp,
+            windowHandles,
+          );
+
+          console.log('mockedEndpoints', mockedEndpoints);
+          const events = await getEventPayloads(driver, mockedEndpoints);
+          console.log('events', events);
+        }
       },
     );
   });
