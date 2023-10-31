@@ -269,7 +269,7 @@ describe('DetectTokensController', function () {
   });
 
   afterEach(function () {
-    nock.enableNetConnect('localhost');
+    nock.enableNetConnect();
     sandbox.restore();
   });
 

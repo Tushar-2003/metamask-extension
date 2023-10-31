@@ -307,6 +307,14 @@ function defaultFixture() {
       TransactionController: {
         transactions: {},
       },
+      SymbolToMatchController: {
+        symbolToMatch: {
+          nativeSymbolToMatch: {
+            '0x1': 'ETH',
+          },
+          tokensSymbolToMatch: {},
+        },
+      },
       config: {},
       firstTimeInfo: {
         date: 1665507600000,
@@ -438,6 +446,11 @@ class FixtureBuilder {
 
   withAlertController(data) {
     merge(this.fixture.data.AlertController, data);
+    return this;
+  }
+
+  withSymbolToMatchController(data) {
+    merge(this.fixture.data.SymbolToMatchController, data);
     return this;
   }
 

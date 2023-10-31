@@ -40,6 +40,12 @@ export const SENTRY_BACKGROUND_STATE = {
     unconnectedAccountAlertShownOrigins: false,
     web3ShimUsageOrigins: false,
   },
+  SymbolToMatchController: {
+    symbolToMatch: {
+      nativeSymbolToMatch: false,
+      tokensSymbolToMatch: false,
+    },
+  },
   AnnouncementController: {
     announcements: false,
   },
@@ -327,6 +333,12 @@ export const SENTRY_UI_STATE = {
     addSnapAccountEnabled: false,
     snapsAddSnapAccountModalDismissed: false,
     ///: END:ONLY_INCLUDE_IN
+    symbolToMatch: {
+      nativeSymbolToMatch: {
+        '0x539': 'ETH',
+      },
+      tokensSymbolToMatch: {},
+    },
   },
   unconnectedAccount: true,
 };

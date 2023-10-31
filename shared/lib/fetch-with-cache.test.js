@@ -14,6 +14,7 @@ describe('Fetch with cache', () => {
   afterEach(() => {
     sinon.restore();
     nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   it('fetches a url', async () => {

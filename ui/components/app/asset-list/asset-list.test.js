@@ -65,6 +65,18 @@ const render = (
           [selectedAddress]: balance,
         },
       },
+      symbolToMatch: {
+        nativeSymbolToMatch: {
+          [CHAIN_IDS.MAINNET]: 'ETH',
+        },
+        tokensSymbolToMatch: {
+          [CHAIN_IDS.MAINNET]: {
+            [USDC_CONTRACT]: 'USDC',
+            [LINK_CONTRACT]: 'LINK',
+            [WBTC_CONTRACT]: 'WBTC',
+          },
+        },
+      },
       contractExchangeRates: {
         [USDC_CONTRACT]: 0.00062566,
         [LINK_CONTRACT]: 0.00423239,

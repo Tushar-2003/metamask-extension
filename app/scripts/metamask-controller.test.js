@@ -253,6 +253,7 @@ describe('MetaMaskController', () => {
   afterEach(() => {
     jest.clearAllMocks();
     nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   afterAll(async () => {

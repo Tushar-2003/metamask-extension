@@ -33,6 +33,8 @@ jest.mock('../../store/actions', () => ({
   addPollingTokenToAppState: jest.fn(),
   showNetworkDropdown: () => mockShowNetworkDropdown,
   hideNetworkDropdown: () => mockHideNetworkDropdown,
+  setSymbolTokensToMatch: () =>
+    jest.fn().mockImplementation(() => Promise.resolve()),
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -121,6 +123,10 @@ describe('Routes Component', () => {
           swapsState: {
             ...mockSendState.metamask.swapsState,
             swapsFeatureIsLive: true,
+          },
+          symbolToMatch: {
+            nativeSymbolToMatch: {},
+            tokensSymbolToMatch: {},
           },
           pendingApprovals: {},
           approvalFlows: [],

@@ -5,6 +5,12 @@
       "unconnectedAccountAlertShownOrigins": "object",
       "web3ShimUsageOrigins": "object"
     },
+    "SymbolToMatchController": {
+      "symbolToMatch": {
+        "nativeSymbolToMatch": "object",
+        "tokensSymbolToMatch": "object"
+      }
+    },
     "AnnouncementController": { "announcements": "object" },
     "AppStateController": {
       "browserEnvironment": {},

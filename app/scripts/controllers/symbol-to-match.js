@@ -20,9 +20,11 @@ const findMatchedSymbol = async (chainId) => {
     url: 'https://chainid.network/chains.json',
     functionName: 'getSafeChainsList',
   });
+
   const matchedChain = safeChainsList.find(
-    (chain) => chain.chainId === parseInt(chainId, 16),
+    (network) => network.chainId === parseInt(chainId, 16),
   );
+
   return matchedChain?.nativeCurrency?.symbol ?? null;
 };
 

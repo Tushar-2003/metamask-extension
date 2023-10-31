@@ -209,6 +209,12 @@
       "swapsStxMaxFeeMultiplier": 2
     }
   },
+  "SymbolToMatchController": {
+    "symbolToMatch": {
+      "nativeSymbolToMatch": "object",
+      "tokensSymbolToMatch": "object"
+    }
+  },
   "TokenListController": {
     "tokenList": "object",
     "tokensChainsCache": {},

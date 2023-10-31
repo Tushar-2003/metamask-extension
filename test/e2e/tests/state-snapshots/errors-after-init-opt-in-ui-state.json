@@ -116,6 +116,12 @@
     "pendingNativeCurrency": null,
     "usdConversionRate": 1300,
     "alertEnabledness": { "unconnectedAccount": true, "web3ShimUsage": true },
+    "SymbolToMatchController": {
+      "symbolToMatch": {
+        "nativeSymbolToMatch": "object",
+        "tokensSymbolToMatch": "object"
+      }
+    },
     "unconnectedAccountAlertShownOrigins": "object",
     "web3ShimUsageOrigins": "object",
     "seedPhraseBackedUp": true,

@@ -624,7 +624,7 @@ export function getIsMatchedNetwork(state) {
 }
 
 export function getOriginalTokensSymbol(state) {
-  return state.metamask.symbolToMatch.tokensSymbolToMatch;
+  return state.metamask.symbolToMatch?.tokensSymbolToMatch;
 }
 
 export function getIsTestnet(state) {

@@ -40,6 +40,14 @@
     "participateInMetaMetrics": false,
     "gasEstimateType": "fee-market",
     "showBetaHeader": false,
+    "symbolToMatch": {
+      "nativeSymbolToMatch": {
+        "0x1": "TEST"
+      },
+      "tokensSymbolToMatch": {
+        "0x3845badAde8e6dFF049820680d1F14bD3903a5d0": "TEST"
+      }
+    },
     "gasFeeEstimates": {
       "low": {
         "minWaitTimeEstimate": 180000,

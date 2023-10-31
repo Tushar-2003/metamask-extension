@@ -471,6 +471,12 @@ describe('Sentry errors', function () {
               metaMetricsId: 'fake-metrics-id',
               participateInMetaMetrics: true,
             })
+            .withSymbolToMatchController({
+              symbolToMatch: {
+                nativeSymbolToMatch: 'object',
+                tokensSymbolToMatch: 'object',
+              },
+            })
             .build(),
           ganacheOptions,
           title: this.test.fullTitle(),
@@ -690,6 +696,7 @@ describe('Sentry errors', function () {
       );
     });
 
+    // todo here ......
     it('should send error events in UI', async function () {
       await withFixtures(
         {
@@ -697,6 +704,12 @@ describe('Sentry errors', function () {
             .withMetaMetricsController({
               metaMetricsId: 'fake-metrics-id',
               participateInMetaMetrics: true,
+            })
+            .withSymbolToMatchController({
+              symbolToMatch: {
+                nativeSymbolToMatch: 'object',
+                tokensSymbolToMatch: 'object',
+              },
             })
             .build(),
           ganacheOptions,
@@ -738,6 +751,12 @@ describe('Sentry errors', function () {
             .withMetaMetricsController({
               metaMetricsId: 'fake-metrics-id',
               participateInMetaMetrics: true,
+            })
+            .withSymbolToMatchController({
+              symbolToMatch: {
+                nativeSymbolToMatch: 'object',
+                tokensSymbolToMatch: 'object',
+              },
             })
             .build(),
           ganacheOptions,
