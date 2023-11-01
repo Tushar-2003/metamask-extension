@@ -747,12 +747,12 @@ exports[`SendPage render renders correctly 1`] = `
                     >
                       <div
                         class="mm-box currency-display-component mm-box--display-flex mm-box--flex-wrap-wrap mm-box--align-items-center"
-                        title="0 ETH"
+                        title="<0.000001 ETH"
                       >
                         <span
                           class="mm-box mm-text currency-display-component__text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
                         >
-                          0
+                          &lt;0.000001
                         </span>
                         <span
                           class="mm-box mm-text currency-display-component__suffix mm-text--inherit mm-box--margin-inline-start-1 mm-box--color-text-default"
@@ -780,12 +780,12 @@ exports[`SendPage render renders correctly 1`] = `
                   >
                     <div
                       class="mm-box currency-display-component mm-box--display-flex mm-box--flex-wrap-wrap mm-box--align-items-center"
-                      title="0 ETH"
+                      title="<0.000001 ETH"
                     >
                       <span
                         class="mm-box mm-text currency-display-component__text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
                       >
-                        0
+                        &lt;0.000001
                       </span>
                       <span
                         class="mm-box mm-text currency-display-component__suffix mm-text--inherit mm-box--margin-inline-start-1 mm-box--color-text-default"
@@ -873,52 +873,20 @@ exports[`SendPage render renders correctly 1`] = `
                     </div>
                   </div>
                   <div
-                    class="mm-box currency-display-component mm-box--display-flex mm-box--flex-wrap-wrap mm-box--align-items-center"
-                    title="<0.000001 ETH"
+                    class="box send__select-recipient-wrapper__group-item__content box--flex-direction-row"
+                    data-testid="recipient"
                   >
                     <p
                       class="mm-box mm-text send__select-recipient-wrapper__group-item__title mm-text--body-lg-medium mm-box--color-text-default"
                     >
-                      &lt;0.000001
-                    </span>
-                    <span
-                      class="mm-box mm-text currency-display-component__suffix mm-text--inherit mm-box--margin-inline-start-1 mm-box--color-text-default"
+                      Address Book Account 1
+                    </p>
+                    <p
+                      class="mm-box mm-text send__select-recipient-wrapper__group-item__subtitle mm-text--body-md mm-box--color-text-alternative"
                     >
                       0xc42e...8813
                     </p>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div
-              class="mm-box mm-box--display-flex mm-box--justify-content-space-between"
-            >
-              <div
-                class="mm-box mm-box--display-flex mm-box--align-items-center"
-              >
-                <p
-                  class="mm-box mm-text mm-text--body-sm mm-box--color-text-alternative"
-                >
-                  0xca8f1...Cf281
-                </p>
-              </div>
-              <div
-                class="mm-box mm-text mm-text--body-sm mm-text--text-align-end mm-box--color-text-alternative"
-              >
-                <div
-                  class="mm-box currency-display-component mm-box--display-flex mm-box--flex-wrap-wrap mm-box--align-items-center"
-                  title="<0.000001 ETH"
-                >
-                  <span
-                    class="mm-box mm-text currency-display-component__text mm-text--inherit mm-text--ellipsis mm-box--color-text-default"
-                  >
-                    &lt;0.000001
-                  </span>
-                  <span
-                    class="mm-box mm-text currency-display-component__suffix mm-text--inherit mm-box--margin-inline-start-1 mm-box--color-text-default"
-                  >
-                    ETH
-                  </span>
                 </div>
               </div>
             </div>
