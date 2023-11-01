@@ -166,7 +166,7 @@ const registerInPageContentScript = async () => {
 registerInPageContentScript();
 
 /**
- * creates an offscreen document that can be used to load iframes containing
+ * Creates an offscreen document that can be used to load iframes containing
  * scripts that can communicate with the extension through the chrome runtime
  * API. Only one offscreen document may exist, so iframes are used within the
  * created offscreen document. See the offscreen folder for more details.
