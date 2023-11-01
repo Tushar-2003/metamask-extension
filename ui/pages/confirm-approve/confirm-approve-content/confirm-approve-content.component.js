@@ -111,16 +111,14 @@ export default class ConfirmApproveContent extends Component {
         txData.securityAlertResponse,
       );
 
-      const eventParams = {
+      this.context.trackEvent({
         category: MetaMetricsEventCategory.Transactions,
         event: MetaMetricsEventName.SignatureRequested,
         properties: {
           action: 'Sign Request',
           ...blockaidMetricsParams,
         },
-      };
-
-      this.context.trackEvent(eventParams);
+      });
     }
   }
   ///: END:ONLY_INCLUDE_IN
