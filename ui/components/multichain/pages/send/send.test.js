@@ -22,7 +22,7 @@ const render = (props = {}) => {
 describe('SendPage', () => {
   describe('render', () => {
     it('renders correctly', () => {
-      const { container, getByTestId } = render();
+      const { container } = render();
       expect(container).toMatchSnapshot();
     });
   });
