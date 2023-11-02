@@ -24522,6 +24522,7 @@ __metadata:
     "@metamask/eth-json-rpc-provider": "npm:^2.2.0"
     "@metamask/eth-keyring-controller": "npm:^13.0.1"
     "@metamask/eth-ledger-bridge-keyring": "npm:^0.15.0"
+    "@metamask/eth-query": "npm:^3.0.1"
     "@metamask/eth-snap-keyring": "npm:^1.0.0"
     "@metamask/eth-token-tracker": "npm:^4.0.0"
     "@metamask/eth-trezor-keyring": "npm:^1.1.0"
