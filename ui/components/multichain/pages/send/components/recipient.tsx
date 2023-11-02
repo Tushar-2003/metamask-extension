@@ -22,7 +22,7 @@ import { getAddressBookEntry } from '../../../../../selectors';
 import Identicon from '../../../../ui/identicon';
 import Confusable from '../../../../ui/confusable';
 import { ellipsify } from '../../../../../pages/send/send.utils';
-import { SendPageAddressBook, SendPageRow, SendPageYourAccount } from '.';
+import { SendPageAddressBook, SendPageRow, SendPageYourAccounts } from '.';
 
 const renderExplicitAddress = (
   address: string,
@@ -101,7 +101,7 @@ export const SendPageRecipient = () => {
   } else {
     contents = (
       <>
-        {userInput ? null : <SendPageYourAccount />}
+        {userInput ? null : <SendPageYourAccounts />}
         <SendPageAddressBook />
       </>
     );

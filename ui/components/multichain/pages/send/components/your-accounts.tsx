@@ -11,7 +11,7 @@ import {
 } from '../../../../../ducks/send';
 import { SendPageRow } from '.';
 
-export const SendPageYourAccount = () => {
+export const SendPageYourAccounts = () => {
   const t = useContext(I18nContext);
   const dispatch = useDispatch();
 
