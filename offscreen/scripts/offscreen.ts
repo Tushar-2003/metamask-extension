@@ -1,15 +1,10 @@
-import { MessageSender } from 'types/global';
+import { BrowserRuntimePostMessageStream } from '@metamask/post-message-stream';
 
-function responder(
-  message: any,
-  sender: MessageSender,
-  sendResponse: (response: any) => void,
-) {
-  console.log('message', message);
-  console.log('sender', sender);
-  sendResponse('acknowledged');
-}
+const parentStream = new BrowserRuntimePostMessageStream({
+  name: 'child',
+  target: 'parent',
+});
 
-window.addEventListener('load', () => {
-  window.chrome.runtime.onMessage.addListener(responder);
+parentStream.on('data', (data) => {
+  console.log('Offscreen Document received data from service worker', data);
 });

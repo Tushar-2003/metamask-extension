@@ -179,7 +179,8 @@ async function createOffscreen() {
   await chrome.offscreen.createDocument({
     url: './offscreen/offscreen.html',
     reasons: ['IFRAME_SCRIPTING'],
-    justification: 'Load HW scripts',
+    justification:
+      'Used for Hardware Wallet and Snaps scripts to communicate with the extension.',
   });
 
   console.debug('Offscreen iframe loaded');
