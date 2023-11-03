@@ -26,9 +26,9 @@ import {
 } from '../../components/component-library';
 ///: BEGIN:ONLY_INCLUDE_IN(snaps)
 import {
-  Color,
   FontWeight,
   IconColor,
+  TextColor,
   TextVariant,
 } from '../constants/design-system';
 import {
@@ -61,9 +61,9 @@ function getLeftIcon(iconName) {
 function getSnapNameComponent(targetSubjectMetadata) {
   return (
     <Text
-      color={Color.primaryDefault}
       fontWeight={FontWeight.Medium}
       variant={TextVariant.inherit}
+      color={TextColor.inherit}
     >
       {getSnapName(targetSubjectMetadata?.origin, targetSubjectMetadata)}
     </Text>
@@ -108,7 +108,12 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
           ?.replace(/'/gu, 'h')}-${curve}-${i}`,
         message: t('snapInstallWarningPublicKeyAccess', [
           getSnapNameComponent(targetSubjectMetadata),
-          <Text as="span" key="2" fontWeight={FontWeight.Medium}>
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            key="2"
+            fontWeight={FontWeight.Medium}
+          >
             {getSnapDerivationPathName(path, curve) ??
               `${path.join('/')} (${curve})`}
           </Text>,
@@ -120,18 +125,25 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
         return {
           ...baseDescription,
           label: t('permission_viewNamedBip32PublicKeys', [
-            <span className="permission-label-item" key={path.join('/')}>
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
+              key={path.join('/')}
+            >
               {friendlyName}
-            </span>,
+            </Text>,
             path.join('/'),
           ]),
           description: t('permission_viewBip32PublicKeysDescription', [
-            <span
-              className="tooltip-label-item"
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
               key={`description-${path.join('/')}`}
             >
               {friendlyName}
-            </span>,
+            </Text>,
             getSnapNameComponent(targetSubjectMetadata),
           ]),
         };
@@ -140,18 +152,25 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
       return {
         ...baseDescription,
         label: t('permission_viewBip32PublicKeys', [
-          <span className="permission-label-item" key={path.join('/')}>
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            fontWeight={FontWeight.Medium}
+            key={path.join('/')}
+          >
             {path.join('/')}
-          </span>,
+          </Text>,
           curve,
         ]),
         description: t('permission_viewBip32PublicKeysDescription', [
-          <span
-            className="tooltip-label-item"
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            fontWeight={FontWeight.Medium}
             key={`description-${path.join('/')}`}
           >
             {path.join('/')}
-          </span>,
+          </Text>,
           getSnapNameComponent(targetSubjectMetadata),
         ]),
       };
@@ -170,7 +189,12 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
           ?.replace(/'/gu, 'h')}-${curve}-${i}`,
         message: t('snapInstallWarningKeyAccess', [
           getSnapNameComponent(targetSubjectMetadata),
-          <Text as="span" key="2" fontWeight={FontWeight.Medium}>
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            key="2"
+            fontWeight={FontWeight.Medium}
+          >
             {getSnapDerivationPathName(path, curve) ??
               `${path.join('/')} (${curve})`}
           </Text>,
@@ -182,18 +206,25 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
         return {
           ...baseDescription,
           label: t('permission_manageNamedBip32Keys', [
-            <span className="permission-label-item" key={path.join('/')}>
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
+              key={path.join('/')}
+            >
               {friendlyName}
-            </span>,
+            </Text>,
             path.join('/'),
           ]),
           description: t('permission_manageBip32KeysDescription', [
-            <span
-              className="tooltip-label-item"
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
               key={`description-${path.join('/')}`}
             >
               {friendlyName}
-            </span>,
+            </Text>,
             getSnapNameComponent(targetSubjectMetadata),
           ]),
         };
@@ -202,18 +233,25 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
       return {
         ...baseDescription,
         label: t('permission_manageBip32Keys', [
-          <span className="permission-label-item" key={path.join('/')}>
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            fontWeight={FontWeight.Medium}
+            key={path.join('/')}
+          >
             {path.join('/')}
-          </span>,
+          </Text>,
           curve,
         ]),
         description: t('permission_manageBip32KeysDescription', [
-          <span
-            className="tooltip-label-item"
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            fontWeight={FontWeight.Medium}
             key={`description-${path.join('/')}`}
           >
             {path.join('/')}
-          </span>,
+          </Text>,
           getSnapNameComponent(targetSubjectMetadata),
         ]),
       };
@@ -225,19 +263,26 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
   }) =>
     permissionValue.caveats[0].value.map(({ coinType }, i) => ({
       label: t('permission_manageBip44Keys', [
-        <span className="permission-label-item" key={`coin-type-${coinType}`}>
+        <Text
+          color={TextColor.inherit}
+          variant={TextVariant.inherit}
+          fontWeight={FontWeight.Medium}
+          key={`coin-type-${coinType}`}
+        >
           {coinTypeToProtocolName(coinType) ||
             t('unrecognizedProtocol', [coinType])}
-        </span>,
+        </Text>,
       ]),
       description: t('permission_manageBip44KeysDescription', [
-        <span
-          className="tooltip-label-item"
+        <Text
+          color={TextColor.inherit}
+          variant={TextVariant.inherit}
+          fontWeight={FontWeight.Medium}
           key={`description-coin-type-${coinType}`}
         >
           {coinTypeToProtocolName(coinType) ||
             t('unrecognizedProtocol', [coinType])}
-        </span>,
+        </Text>,
         getSnapNameComponent(targetSubjectMetadata),
       ]),
       leftIcon: IconName.Key,
@@ -245,7 +290,12 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
       id: `key-access-bip44-${coinType}-${i}`,
       message: t('snapInstallWarningKeyAccess', [
         getSnapNameComponent(targetSubjectMetadata),
-        <Text as="span" key="2" fontWeight={FontWeight.Medium}>
+        <Text
+          color={TextColor.inherit}
+          variant={TextVariant.inherit}
+          key="2"
+          fontWeight={FontWeight.Medium}
+        >
           {coinTypeToProtocolName(coinType) ||
             t('unrecognizedProtocol', [coinType])}
         </Text>,
@@ -272,10 +322,9 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
   }),
   [RestrictedMethods.snap_getLocale]: ({ t, targetSubjectMetadata }) => ({
     label: t('permission_getLocale'),
-    description: t(
-      'permission_getLocaleDescription',
+    description: t('permission_getLocaleDescription', [
       getSnapNameComponent(targetSubjectMetadata),
-    ),
+    ]),
     leftIcon: IconName.Home,
     weight: 3,
   }),
@@ -296,9 +345,14 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
         return {
           ...baseDescription,
           label: t('permission_accessNamedSnap', [
-            <span className="permission-label-item" key={snapId}>
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
+              key={snapId}
+            >
               {friendlyName}
-            </span>,
+            </Text>,
           ]),
           description: t('permission_accessSnapDescription', [friendlyName]),
         };
@@ -349,10 +403,9 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
       {
         ...baseDescription,
         label: t('permission_transactionInsight'),
-        description: t(
-          'permission_transactionInsightDescription',
+        description: t('permission_transactionInsightDescription', [
           getSnapNameComponent(targetSubjectMetadata),
-        ),
+        ]),
       },
     ];
 
@@ -395,7 +448,9 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
     leftIcon: IconName.Ethereum,
     weight: 2,
     id: 'ethereum-provider-access',
-    message: t('ethereumProviderAccess', [targetSubjectMetadata?.origin]),
+    message: t('ethereumProviderAccess', [
+      getSnapNameComponent(targetSubjectMetadata),
+    ]),
   }),
   [EndowmentPermissions['endowment:rpc']]: ({
     t,
@@ -407,7 +462,8 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
       weight: 2,
     };
 
-    const { snaps, dapps } = getRpcCaveatOrigins(permissionValue);
+    const { snaps, dapps, allowedOrigins } =
+      getRpcCaveatOrigins(permissionValue);
     const results = [];
     if (snaps) {
       results.push({
@@ -418,7 +474,7 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
         ]),
         description: t('permission_rpcDescription', [
           t('otherSnaps'),
-          getSnapName(targetSubjectMetadata),
+          getSnapNameComponent(targetSubjectMetadata),
         ]),
       });
     }
@@ -432,6 +488,52 @@ export const PERMISSION_DESCRIPTIONS = deepFreeze({
         ]),
         description: t('permission_rpcDescription', [
           t('websites'),
+          getSnapNameComponent(targetSubjectMetadata),
+        ]),
+      });
+    }
+
+    if (allowedOrigins.length > 0) {
+      let originsMessage;
+
+      if (allowedOrigins.length === 1) {
+        originsMessage = allowedOrigins[0];
+      } else {
+        const lastOrigin = allowedOrigins.slice(-1);
+
+        const originList = allowedOrigins.slice(0, -1).map((origin) => (
+          <>
+            <Text
+              color={TextColor.inherit}
+              variant={TextVariant.inherit}
+              fontWeight={FontWeight.Medium}
+            >
+              {origin}
+            </Text>
+            {', '}
+          </>
+        ));
+
+        originsMessage = t('permission_rpcDescriptionOriginList', [
+          originList,
+          <Text
+            color={TextColor.inherit}
+            variant={TextVariant.inherit}
+            fontWeight={FontWeight.Medium}
+            key="2"
+          >
+            {lastOrigin}
+          </Text>,
+        ]);
+      }
+      results.push({
+        ...baseDescription,
+        label: t('permission_rpc', [
+          originsMessage,
+          getSnapNameComponent(targetSubjectMetadata),
+        ]),
+        description: t('permission_rpcDescription', [
+          originsMessage,
           getSnapNameComponent(targetSubjectMetadata),
         ]),
       });
