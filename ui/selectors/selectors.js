@@ -101,7 +101,10 @@ import {
 } from './transactions';
 ///: BEGIN:ONLY_INCLUDE_IN(snaps)
 // eslint-disable-next-line import/order
-import { getPermissionSubjects } from './permissions';
+import {
+  getPermissionSubjects,
+  getConnectedSubjectsForAllAddresses,
+} from './permissions';
 ///: END:ONLY_INCLUDE_IN
 import { createDeepEqualSelector } from './util';
 
@@ -922,6 +925,13 @@ export const getFullTxData = createDeepEqualSelector(
   },
 );
 
+export const getAllConnectedAccounts = createDeepEqualSelector(
+  getConnectedSubjectsForAllAddresses,
+  (connectedSubjects) => {
+    return Object.keys(connectedSubjects);
+  },
+);
+
 ///: BEGIN:ONLY_INCLUDE_IN(snaps)
 export function getSnaps(state) {
   return state.metamask.snaps;
@@ -1427,6 +1437,10 @@ export const getTokenDetectionSupportNetworkByChainId = (state) => {
       return POLYGON_DISPLAY_NAME;
     case CHAIN_IDS.AVALANCHE:
       return AVALANCHE_DISPLAY_NAME;
+    case CHAIN_IDS.LINEA_GOERLI:
+      return LINEA_GOERLI_DISPLAY_NAME;
+    case CHAIN_IDS.LINEA_MAINNET:
+      return LINEA_MAINNET_DISPLAY_NAME;
     case CHAIN_IDS.AURORA:
       return AURORA_DISPLAY_NAME;
     default:
@@ -1435,7 +1449,7 @@ export const getTokenDetectionSupportNetworkByChainId = (state) => {
 };
 /**
  * To check if the chainId supports token detection,
- * currently it returns true for Ethereum Mainnet, Polygon, BSC, Avalanche and Aurora
+ * currently it returns true for Ethereum Mainnet, BSC, Polygon, Avalanche, Linea and Aurora
  *
  * @param {*} state
  * @returns Boolean
@@ -1447,6 +1461,8 @@ export function getIsDynamicTokenListAvailable(state) {
     CHAIN_IDS.BSC,
     CHAIN_IDS.POLYGON,
     CHAIN_IDS.AVALANCHE,
+    CHAIN_IDS.LINEA_GOERLI,
+    CHAIN_IDS.LINEA_MAINNET,
     CHAIN_IDS.AURORA,
   ].includes(chainId);
 }
@@ -1676,10 +1692,11 @@ export function getSnapsList(state) {
   const snaps = getSnaps(state);
   return Object.entries(snaps).map(([key, snap]) => {
     const targetSubjectMetadata = getTargetSubjectMetadata(state, snap?.id);
-
     return {
       key,
       id: snap.id,
+      iconUrl: targetSubjectMetadata?.iconUrl,
+      subjectType: targetSubjectMetadata?.subjectType,
       packageName: removeSnapIdPrefix(snap.id),
       name: getSnapName(snap.id, targetSubjectMetadata),
     };

@@ -12,7 +12,7 @@ import SendTransactionScreen from '../send';
 import Swaps from '../swaps';
 import ConfirmTransaction from '../confirm-transaction';
 import Home from '../home';
-import { Connections } from '../../components/multichain/pages';
+import { AllConnections, Connections } from '../../components/multichain/pages';
 import Settings from '../settings';
 import Authenticated from '../../helpers/higher-order-components/authenticated';
 import Initialized from '../../helpers/higher-order-components/initialized';
@@ -84,6 +84,7 @@ import {
   ONBOARDING_UNLOCK_ROUTE,
   TOKEN_DETAILS,
   CONNECTIONS,
+  ALL_CONNECTIONS,
   ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
   INSTITUTIONAL_FEATURES_DONE_ROUTE,
   CUSTODY_ACCOUNT_DONE_ROUTE,
@@ -145,8 +146,6 @@ export default class Routes extends Component {
     history: PropTypes.object,
     location: PropTypes.object,
     lockMetaMask: PropTypes.func,
-    isMouseUser: PropTypes.bool,
-    setMouseUserState: PropTypes.func,
     providerId: PropTypes.string,
     providerType: PropTypes.string,
     autoLockTimeLimit: PropTypes.number,
@@ -384,6 +383,13 @@ export default class Routes extends Component {
         {process.env.MULTICHAIN && (
           <Authenticated path={CONNECTIONS} component={Connections} />
         )}
+        {process.env.MULTICHAIN && (
+          <Authenticated
+            path={ALL_CONNECTIONS}
+            component={AllConnections}
+            exact
+          />
+        )}
         <Authenticated path={DEFAULT_ROUTE} component={Home} />
       </Switch>
     );
@@ -474,6 +480,17 @@ export default class Routes extends Component {
       return true;
     }
 
+    const isAllConnectionsPage = Boolean(
+      matchPath(location.pathname, {
+        path: ALL_CONNECTIONS,
+        exact: false,
+      }),
+    );
+
+    if (isAllConnectionsPage) {
+      return true;
+    }
+
     if (windowType === ENVIRONMENT_TYPE_POPUP && this.onConfirmPage()) {
       return true;
     }
@@ -550,8 +567,6 @@ export default class Routes extends Component {
       textDirection,
       loadingMessage,
       isNetworkLoading,
-      setMouseUserState,
-      isMouseUser,
       browserEnvironmentOs: os,
       browserEnvironmentBrowser: browser,
       isNetworkUsed,
@@ -607,15 +622,8 @@ export default class Routes extends Component {
         className={classnames('app', {
           [`os-${os}`]: os,
           [`browser-${browser}`]: browser,
-          'mouse-user-styles': isMouseUser,
         })}
         dir={textDirection}
-        onClick={() => setMouseUserState(true)}
-        onKeyDown={(e) => {
-          if (e.keyCode === 9) {
-            setMouseUserState(false);
-          }
-        }}
       >
         {shouldShowNetworkDeprecationWarning && <DeprecatedTestNetworks />}
         {shouldShowNetworkInfo && <NewNetworkInfo />}
