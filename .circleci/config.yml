@@ -934,10 +934,7 @@ jobs:
     executor: node-browsers
     parallelism: 1
     steps:
-      - checkout
-      - run:
-          name: Re-Install Chrome
-          command: ./.circleci/scripts/chrome-install.sh
+      - run: *shallow-git-clone
       - attach_workspace:
           at: .
       - run:
@@ -946,6 +943,9 @@ jobs:
       - run:
           name: Move test zips to builds
           command: mv ./builds-test ./builds
+      - run:
+          name: Activate Selenium Manager for Chrome
+          command: node_modules/selenium-webdriver/bin/linux/selenium-manager --browser chrome
       - run:
           name: test:e2e:chrome:multi-provider
           command: |
